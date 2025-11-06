@@ -7,8 +7,8 @@ This project is under development.
 
 ## Authors
 
-- [@pj43svh](https://github.com/pj43svh)
 - [@NPone29](https://github.com/NPone29)
+- [@pj43svh](https://github.com/pj43svh)
 
 
 ## Support

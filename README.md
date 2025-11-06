@@ -1,7 +1,10 @@
 
 # Othello MA-24 project
 
-Welcome to our project about creating a Othello game from the start. This project is an exam. We hope you will like our game.
+Welcome to our Othello game project! 
+This project was developed from scratch as part of our exam assignment. 
+This project is under development.
+
 ## Authors
 
 - [@pj43svh](https://github.com/pj43svh)

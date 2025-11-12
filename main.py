@@ -1,4 +1,13 @@
 import pygame
+import random
+
+pygame.init()
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 128)
+RED = (200, 0, 0)
+
 
 grid = [
     [None, None, None, None, None, None, None, None],

@@ -8,6 +8,12 @@ WHITE = (255, 255, 255)
 BLUE = (0, 0, 128)
 RED = (200, 0, 0)
 
+BOARD_WIDTH = 3
+BOARD_HEIGHT = 3
+TILE_SIZE = 150
+
+screen = pygame.display.set_mode([BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE])
+
 
 grid = [
     [None, None, None, None, None, None, None, None],
@@ -24,6 +30,7 @@ Player_1 = 0
 Player_2 = 1
 
 current_player = Player_1
+print(current_player)
 
 def get_next_player(current_player):
     if current_player == Player_1:

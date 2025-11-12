@@ -11,6 +11,11 @@ grid = [
     [None, None, None, None, None, None, None, None],
 ]
 
+Player_1 = 0
+Player_2 = 1
+
+current_player = Player_1
+
 running = True
 while running:
 

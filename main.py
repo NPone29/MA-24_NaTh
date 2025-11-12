@@ -48,4 +48,4 @@ while running:
 
     screen.fill(WHITE)
     #draw_grid()
-    pygame.display.flip
+    pygame.display.flip()

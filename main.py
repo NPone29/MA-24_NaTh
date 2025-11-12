@@ -13,6 +13,7 @@ BOARD_HEIGHT = 3
 TILE_SIZE = 150
 
 screen = pygame.display.set_mode([BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE])
+pygame.display.set_caption("MA-24 : Othello game")
 
 
 grid = [

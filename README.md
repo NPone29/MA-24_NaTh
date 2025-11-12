@@ -13,7 +13,7 @@ This project is under development.
 
 ## Support
 
-For support, email natan.humblet@gmail.com.
+For support, email [natan.humblet@gmail.com](mailto:natan.humblet@gmail.com).
 
 
 ## CPNV school

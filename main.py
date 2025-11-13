@@ -44,12 +44,22 @@ def draw_line(screen, start, end, color=BLACK):
 
 def draw_grid_lines(screen):
     # vertical lines
-    draw_line(screen, (1, 0), (1, 3))
-    draw_line(screen, (2, 0), (2, 3))
+    draw_line(screen, (1, 0), (1, 8))
+    draw_line(screen, (2, 0), (2, 8))
+    draw_line(screen, (3, 0), (3, 8))
+    draw_line(screen, (4, 0), (4, 8))
+    draw_line(screen, (5, 0), (5, 8))
+    draw_line(screen, (6, 0), (6, 8))
+    draw_line(screen, (7, 0), (7, 8))
 
     # horizontal lines
-    draw_line(screen, (0, 1), (3, 1))
-    draw_line(screen, (0, 2), (3, 2))
+    draw_line(screen, (0, 1), (8, 1))
+    draw_line(screen, (0, 2), (8, 2))
+    draw_line(screen, (0, 3), (8, 3))
+    draw_line(screen, (0, 4), (8, 4))
+    draw_line(screen, (0, 5), (8, 5))
+    draw_line(screen, (0, 6), (8, 6))
+    draw_line(screen, (0, 7), (8, 7))
 
 Player_1 = 0
 Player_2 = 1
@@ -74,5 +84,6 @@ while running:
             print(case)
 
     screen.fill(WHITE)
+    draw_grid_lines(screen)
     #draw_grid()
     pygame.display.flip()

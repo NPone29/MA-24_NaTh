@@ -15,7 +15,8 @@ TILE_SIZE = 100
 screen = pygame.display.set_mode([BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE])
 pygame.display.set_caption("MA-24 : Othello game")
 
-
+background = pygame.image.load("Assets/background.png")  # on charge l'arrière plan (code donné par copilot)
+background = pygame.transform.scale(background, (800, 800))
 grid = [
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
@@ -39,7 +40,7 @@ def draw_line(screen, start, end, color=BLACK):
         color,
         (start[0] * TILE_SIZE, start[1] * TILE_SIZE),
         (end[0] * TILE_SIZE, end[1] * TILE_SIZE),
-        5
+        7
     )
 
 def draw_grid_lines(screen):
@@ -83,7 +84,9 @@ while running:
             case = pos_to_case(pos)
             print(case)
 
-    screen.fill(WHITE)
-    draw_grid_lines(screen)
-    #draw_grid()
-    pygame.display.flip()
+    screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0
+
+
+
+    draw_grid_lines(screen)# draw_grid()
+    pygame.display.flip()  # Met à jour l’écran

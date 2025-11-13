@@ -18,8 +18,11 @@ pygame.display.set_caption("MA-24 : Othello game")
 background = pygame.image.load("Assets/background.png")  # on charge l'arrière plan (code donné par copilot)
 background = pygame.transform.scale(background, (800, 800))
 
-gameIcon = pygame.image.load('Assets/icon.png')
+gameIcon = pygame.image.load("Assets/icon.png")
 pygame.display.set_icon(gameIcon)
+
+blue_pawn = pygame.image.load("Assets/blue_pawn.png")
+red_pawn = pygame.image.load("Assets/red_pawn.png")
 
 grid = [
     [None, None, None, None, None, None, None, None],
@@ -32,7 +35,7 @@ grid = [
     [None, None, None, None, None, None, None, None],
 ]
 
-def pos_to_case(pos):
+def     pos_to_case(pos):
     return (
         int(pos[0] / TILE_SIZE) % 8,
         int(pos[1] / TILE_SIZE) % 8,

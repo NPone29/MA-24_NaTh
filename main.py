@@ -17,6 +17,10 @@ pygame.display.set_caption("MA-24 : Othello game")
 
 background = pygame.image.load("Assets/background.png")  # on charge l'arrière plan (code donné par copilot)
 background = pygame.transform.scale(background, (800, 800))
+
+gameIcon = pygame.image.load('Assets/icon.png')
+pygame.display.set_icon(gameIcon)
+
 grid = [
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
@@ -84,9 +88,7 @@ while running:
             case = pos_to_case(pos)
             print(case)
 
-    screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0
-
-
+    screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0) (code généré par copilot)
 
     draw_grid_lines(screen)# draw_grid()
     pygame.display.flip()  # Met à jour l’écran

@@ -8,9 +8,9 @@ WHITE = (255, 255, 255)
 BLUE = (0, 0, 128)
 RED = (200, 0, 0)
 
-BOARD_WIDTH = 3
-BOARD_HEIGHT = 3
-TILE_SIZE = 150
+BOARD_WIDTH = 8
+BOARD_HEIGHT = 8
+TILE_SIZE = 100
 
 screen = pygame.display.set_mode([BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE])
 pygame.display.set_caption("MA-24 : Othello game")
@@ -31,7 +31,6 @@ Player_1 = 0
 Player_2 = 1
 
 current_player = Player_1
-print(current_player)
 
 def get_next_player(current_player):
     if current_player == Player_1:

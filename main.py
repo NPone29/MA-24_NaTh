@@ -97,7 +97,7 @@ def get_next_player(current_player):
 def play(coordinates):
     global grid, current_player
 
-    grid[coordinates[0]][coordinates[-1]] = current_player
+    grid[coordinates[0[1]]] = current_player
 
 
     for i in grid:

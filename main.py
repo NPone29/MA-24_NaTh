@@ -21,9 +21,6 @@ background = pygame.transform.scale(background, (800, 800))
 gameIcon = pygame.image.load("Assets/icon.png")
 pygame.display.set_icon(gameIcon)
 
-blue_pawn = pygame.image.load("Assets/blue_pawn.png")
-red_pawn = pygame.image.load("Assets/red_pawn.png")
-
 grid = [
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
@@ -69,8 +66,22 @@ def draw_grid_lines(screen):
     draw_line(screen, (0, 6), (8, 6))
     draw_line(screen, (0, 7), (8, 7))
 
-def draw_player():
-    pawn_blue = pygame.image.load("./Assets/")
+def draw_player(player, coordinates):
+    blue_pawn = pygame.image.load("Assets/blue_pawn.png")
+    red_pawn = pygame.image.load("Assets/red_pawn.png")
+
+    if player == 0:
+        bleu_pawn = pygame.transform.scale(blue_pawn, (300, 300))
+
+        rect = bleu_pawn.get_rect(place=coordinates)
+        screen.blit(bleu_pawn, rect)
+    elif player == 1:
+
+        red_pawn = pygame.transform.scale(red_pawn, (300, 300))
+
+        rect = red_pawn.get_rect(place=coordinates)
+        screen.blit(red_pawn, rect)
+
 
 Player_1 = 0
 Player_2 = 1
@@ -83,7 +94,11 @@ def get_next_player(current_player):
     else :
         return Player_1
     
-def play():
+def play(coordinates):
+    global grid, current_player
+
+    grid[coordinates[0]][coordinates[-1]] = current_player
+
 
     for i in grid:
         for x in i:
@@ -95,6 +110,9 @@ def play():
                 continue
     pygame.display.flip()
 
+    current_player = get_next_player(current_player)
+
+
 running = True
 while running:
 
@@ -105,6 +123,7 @@ while running:
             pos = pygame.mouse.get_pos()
             case = pos_to_case(pos)
             print(case)
+            play = play(case)
 
     screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0) (code généré par copilot)
 

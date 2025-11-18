@@ -70,17 +70,21 @@ def draw_player(coordinates, player):
     blue_pawn = pygame.image.load("Assets/blue_pawn.png")
     red_pawn = pygame.image.load("Assets/red_pawn.png")
 
-    if player == 0:
-        bleu_pawn = pygame.transform.scale(blue_pawn, (300, 300))
+    x, y = coordinates # Idée de copilot pour décomposer les coordonnées
+    pixel = (x * TILE_SIZE, y * TILE_SIZE)
 
-        rect = bleu_pawn.get_rect(place=coordinates)
+    if player == 0:
+        bleu_pawn = pygame.transform.scale(blue_pawn, (TILE_SIZE, TILE_SIZE))
+
+        rect = bleu_pawn.get_rect(topleft=pixel)
         screen.blit(bleu_pawn, rect)
     elif player == 1:
 
-        red_pawn = pygame.transform.scale(red_pawn, (300, 300))
+        red_pawn = pygame.transform.scale(red_pawn, (TILE_SIZE, TILE_SIZE))
 
-        rect = red_pawn.get_rect(place=coordinates)
+        rect = red_pawn.get_rect(topleft=pixel)
         screen.blit(red_pawn, rect)
+    pygame.display.flip()
 
 
 Player_1 = 0
@@ -97,18 +101,11 @@ def get_next_player(current_player):
 def play(coordinates):
     global grid, current_player
 
-    grid[coordinates[0]][coordinates[-1]] = current_player
+    x, y = coordinates # Idée de copilot pour décomposer les coordonnées
+    grid[y][x] = current_player
 
 
-    for i in grid:
-        for x in i:
-            if x == 0:
-                pass
-            elif x == 1:
-                pass
-            else: 
-                continue
-    pygame.display.flip()
+    draw_player(coordinates, current_player)
 
     current_player = get_next_player(current_player)
 

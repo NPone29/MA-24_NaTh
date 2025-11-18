@@ -25,8 +25,8 @@ grid = [
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
+    [None, None, None, 0, 1, None, None, None],
+    [None, None, None, 1, 0, None, None, None],
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
@@ -66,7 +66,7 @@ def draw_grid_lines(screen):
     draw_line(screen, (0, 6), (8, 6))
     draw_line(screen, (0, 7), (8, 7))
 
-def draw_player(player, coordinates):
+def draw_player(coordinates, player):
     blue_pawn = pygame.image.load("Assets/blue_pawn.png")
     red_pawn = pygame.image.load("Assets/red_pawn.png")
 
@@ -123,7 +123,7 @@ while running:
             pos = pygame.mouse.get_pos()
             case = pos_to_case(pos)
             print(case)
-            play = play(case)
+            play(case)
 
     screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0) (code généré par copilot)
 

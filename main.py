@@ -66,6 +66,9 @@ def draw_grid_lines(screen):
     draw_line(screen, (0, 6), (8, 6))
     draw_line(screen, (0, 7), (8, 7))
 
+def draw_player():
+    pawn_blue = pygame.image.load("./Assets/")
+
 Player_1 = 0
 Player_2 = 1
 
@@ -76,6 +79,18 @@ def get_next_player(current_player):
         return Player_2
     else :
         return Player_1
+    
+def play():
+
+    for i in grid:
+        for x in i:
+            if x == 0:
+                pass
+            elif x == 1:
+                pass
+            else: 
+                continue
+    pygame.display.flip()
 
 running = True
 while running:

@@ -140,14 +140,6 @@ while running:
             print(case)
             play(case)
     
-    for x in grid :
-        for y in x :
-                if y == 1 or y==0 :
-                    posx=x.index()
-                    posy=y.index()
-                    print((posx,posy),current_player)
-                    draw_player((x,y),current_player)
-
 
     screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0) (code généré par copilot)
 

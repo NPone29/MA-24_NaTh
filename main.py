@@ -84,7 +84,14 @@ def draw_player(coordinates, player):
 
         rect = red_pawn.get_rect(topleft=pixel)
         screen.blit(red_pawn, rect)
-    pygame.display.flip()
+
+def load_player():
+    for x in range(len(grid)):
+        for y in range(len(grid[x])):
+            if grid[x][y] == 0:
+                draw_player((y, x), 0)
+            elif grid[x][y] == 1:
+                draw_player((y, x), 1)
 
 
 Player_1 = 0
@@ -102,8 +109,12 @@ def play(coordinates):
     global grid, current_player
 
     x, y = coordinates # Idée de copilot pour décomposer les coordonnées
-    grid[y][x] = current_player
-    draw_player(coordinates, current_player)
+    if grid[y][x] == None:
+        grid[y][x] = current_player
+        draw_player(coordinates, current_player)
+    else:
+        print("Mauvais endroit")
+        return
 
     current_player = get_next_player(current_player)
 
@@ -140,5 +151,6 @@ while running:
 
     screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0) (code généré par copilot)
 
+    load_player()
     draw_grid_lines(screen)# draw_grid()
     pygame.display.flip()  # Met à jour l’écran

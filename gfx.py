@@ -11,7 +11,7 @@ RED = (200, 0, 0)
 
 
 
-screen = pygame.display.set_mode([BOARD_WIDTH * TILE_SIZE, BOARD_HEIGHT * TILE_SIZE])
+screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE])
 pygame.display.set_caption("MA-24 : Othello game")
 
 background = pygame.image.load("Assets/background.png")  # on charge l'arrière plan (code donné par copilot)
@@ -24,16 +24,16 @@ pygame.display.set_icon(gameIcon)
 
 def     pos_to_case(pos):
     return (
-        int(pos[0] / TILE_SIZE) % 8,
-        int(pos[1] / TILE_SIZE) % 8,
+        int(pos[0] / core.TILE_SIZE) % 8,
+        int(pos[1] / core.TILE_SIZE) % 8,
     )
 
 def draw_line(screen, start, end, color=BLACK):
     pygame.draw.line(
         screen,
         color,
-        (start[0] * TILE_SIZE, start[1] * TILE_SIZE),
-        (end[0] * TILE_SIZE, end[1] * TILE_SIZE),
+        (start[0] * core.TILE_SIZE, start[1] * core.TILE_SIZE),
+        (end[0] * core.TILE_SIZE, end[1] * core.TILE_SIZE),
         7
     )
 
@@ -61,62 +61,30 @@ def draw_player(coordinates, player):
     red_pawn = pygame.image.load("Assets/red_pawn.png")
 
     x, y = coordinates # Idée de copilot pour décomposer les coordonnées
-    pixel = (x * TILE_SIZE, y * TILE_SIZE)
+    pixel = (x * core.TILE_SIZE, y * core.TILE_SIZE)
 
     if player == 0:
-        bleu_pawn = pygame.transform.scale(blue_pawn, (TILE_SIZE, TILE_SIZE))
+        bleu_pawn = pygame.transform.scale(blue_pawn, (core.TILE_SIZE, core.TILE_SIZE))
 
         rect = bleu_pawn.get_rect(topleft=pixel)
         screen.blit(bleu_pawn, rect)
     elif player == 1:
 
-        red_pawn = pygame.transform.scale(red_pawn, (TILE_SIZE, TILE_SIZE))
+        red_pawn = pygame.transform.scale(red_pawn, (core.TILE_SIZE, core.TILE_SIZE))
 
         rect = red_pawn.get_rect(topleft=pixel)
         screen.blit(red_pawn, rect)
 
 def load_player():
-    for x in range(len(grid)):
-        for y in range(len(grid[x])):
-            if grid[x][y] == 0:
+    for x in range(len(core.grid)):
+        for y in range(len(core.grid[x])):
+            if core.grid[x][y] == 0:
                 draw_player((y, x), 0)
-            elif grid[x][y] == 1:
+            elif core.grid[x][y] == 1:
                 draw_player((y, x), 1)
 
 
-Player_1 = 0
-Player_2 = 1
 
-current_player = Player_1
-
-def get_next_player(current_player):
-    if current_player == Player_1:
-        return Player_2
-    else :
-        return Player_1
-    
-def play(coordinates):
-    global grid, current_player
-
-    x, y = coordinates # Idée de copilot pour décomposer les coordonnées
-    if grid[y][x] == None:
-        grid[y][x] = current_player
-        draw_player(coordinates, current_player)
-    else:
-        color =grid[y][x]
-        change_color(color,coordinates)
-        return
-
-    current_player = get_next_player(current_player)
-
-def change_color(color,pos):
-    x,y = pos
-    if color == 0:
-        grid[y][x] = 1
-    elif color ==1:
-        grid[y][x] = 0
-    else :
-        print("error, can't replace color at ",y,x)
 
 def run_othello():
     running = True
@@ -129,7 +97,7 @@ def run_othello():
                 pos = pygame.mouse.get_pos()
                 case = pos_to_case(pos)
                 print(case)
-                play(case)
+                core.play(case)
         
 
         screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0) (code généré par copilot)

@@ -107,6 +107,14 @@ def play(coordinates):
 
     current_player = get_next_player(current_player)
 
+def change_color(color,pos):
+    x,y = pos
+    if color == 0:
+        grid[y][x] = 1
+    elif color ==1:
+        grid[y][x] = 0
+    else :
+        print("error, can't replace color at ",y,x)
 
 
 running = True
@@ -127,7 +135,7 @@ while running:
                     posx=x.index()
                     posy=y.index()
                     print((posx,posy),current_player)
-                    #draw_player((x,y),current_player)
+                    draw_player((x,y),current_player)
 
 
     screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0) (code généré par copilot)

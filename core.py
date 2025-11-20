@@ -48,4 +48,4 @@ def get_next_player(current_player):
         return Player_2
     else :
         return Player_1
-    
+

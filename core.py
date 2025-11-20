@@ -1,20 +1,34 @@
 import gfx
 
-grid = [
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, 0, 1, None, None, None],
-    [None, None, None, 1, 0, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None],
-]
+def create_grid(long,larg):
+    grid = []
+    for i in range(long):
+        row = []
+        for j in range(larg):
+            row.append(None)
+        grid.append(row)
+
+    middlex = int(long/2)
+    middley= int(larg/2)
+
+    grid[middley-1][middlex-1] = 0
+    grid[middley][middlex-1] = 1
+    grid[middley][middlex] = 0
+    grid[middley-1][middlex] = 1
+
+    return grid
+
+    
+
+
+    
 
 BOARD_WIDTH = 8
 BOARD_HEIGHT = 8
 TILE_SIZE = 100
 
+grid = create_grid(BOARD_HEIGHT,BOARD_WIDTH)
+print(grid)
 def play(coordinates):
     global grid, current_player
 

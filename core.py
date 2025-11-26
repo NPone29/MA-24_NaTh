@@ -3,8 +3,8 @@ import pygame
 import tkinter as tk
 from tkinter import messagebox
 
-BOARD_WIDTH = 8
-BOARD_HEIGHT = 8
+BOARD_WIDTH = 8 #max 19
+BOARD_HEIGHT = 8 #max 10
 TILE_SIZE = 100
 
 def create_grid(long,larg):
@@ -18,10 +18,10 @@ def create_grid(long,larg):
     middlex = int(long/2)
     middley= int(larg/2)
 
-    grid[middley-1][middlex-1] = 0
-    grid[middley][middlex-1] = 1
-    grid[middley][middlex] = 0
-    grid[middley-1][middlex] = 1
+    grid[middlex-1][middley-1] = 0
+    grid[middlex-1][middley] = 1
+    grid[middlex][middley] = 0
+    grid[middlex][middley-1] = 1
 
     return grid
 

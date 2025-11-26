@@ -14,8 +14,8 @@ GREEN =(20, 163, 58)
 screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE])
 pygame.display.set_caption("MA-24 : Othello game")
 
-background = pygame.image.load("Assets/flowery_background.png")  # on charge l'arrière plan (code donné par copilot)
-background = pygame.transform.scale(background, (800, 800))
+background_image = pygame.image.load("Assets/flowery_background.png").convert()
+background_tile = pygame.transform.scale(background_image, (core.TILE_SIZE * 8, core.TILE_SIZE * 8))
 
 gameIcon = pygame.image.load("Assets/icon.png")
 pygame.display.set_icon(gameIcon)
@@ -116,8 +116,15 @@ def run_othello():
                 core.play(case)
         
 
-        screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0) (code généré par copilot)
-
+        # Répéter le bloc 8x8 (background_tile) pour couvrir dynamiquement la taille du plateau (code de copilot UNIQUEMENT pour répéter l'arrière plan)
+        board_px_w = core.BOARD_WIDTH * core.TILE_SIZE
+        board_px_h = core.BOARD_HEIGHT * core.TILE_SIZE
+        tile_w = background_tile.get_width()
+        tile_h = background_tile.get_height()
+        for bx in range(0, board_px_w, tile_w):
+            for by in range(0, board_px_h, tile_h):
+                screen.blit(background_tile, (bx, by))
+ 
         load_player()
         check_legal_moves(core.current_player)
         draw_grid_lines(screen,core.BOARD_HEIGHT,core.BOARD_WIDTH)# draw_grid()

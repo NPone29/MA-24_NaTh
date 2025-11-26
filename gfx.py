@@ -73,9 +73,9 @@ def draw_player(coordinates, player):
 def draw_star(coordinates, player):
     x, y = coordinates
     if player == 0:
-        star = pygame.image.load("Assets/star_blue.png")
+        star = pygame.image.load("Assets/blue_star.png")
     else:
-        star = pygame.image.load("Assets/star.png")
+        star = pygame.image.load("Assets/red_star.png")
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 
@@ -87,18 +87,20 @@ def load_player():
             elif core.grid[x][y] == 1:
                 draw_player((y, x), 1)
 
-def check_legal_moves(coordinates, player):
+def check_legal_moves(player):
     legal_move = []
     for dx in [-1, 0, 1]:
         for dy in [-1, 0, 1]:
             if dx == 0 and dy == 0:
                 continue
-            x, y = coordinates[0] + dx, coordinates[1] + dy
-            if 0 <= x < core.BOARD_WIDTH and 0 <= y < core.BOARD_HEIGHT:
-                if core.grid[y][x] == (1 - player):
-                    legal_move.append((x, y))
-    for i in legal_move:
-        draw_star(i)
+            for x in range(core.BOARD_WIDTH):
+                for y in range(core.BOARD_HEIGHT):
+                    if core.grid[y][x] is None:
+                        captured = core.rules(core.grid, player, (x, y), dx, dy)
+                        if captured:
+                            legal_move.append((x, y))
+                            draw_star((x, y), player)
+                            break
 
 def run_othello():
     running = True
@@ -117,6 +119,6 @@ def run_othello():
         screen.blit(background, (0, 0))  # Affiche l’image à la position (0, 0) (code généré par copilot)
 
         load_player()
-        check_legal_moves(case, core.current_player)
+        check_legal_moves(core.current_player)
         draw_grid_lines(screen,core.BOARD_HEIGHT,core.BOARD_WIDTH)# draw_grid()
         pygame.display.flip()  # Met à jour l’écran

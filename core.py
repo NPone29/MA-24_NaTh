@@ -1,4 +1,7 @@
 import gfx
+import pygame
+import tkinter as tk
+from tkinter import messagebox
 
 BOARD_WIDTH = 8
 BOARD_HEIGHT = 8
@@ -64,6 +67,7 @@ def play(coordinates):
     x, y = coordinates # Idée de copilot pour décomposer les coordonnées
     
     if grid[y][x] is not None:
+        messagebox.showerror("Invalid Move", "Invalid move, cell already occupied.")
         print("Invalid move, cell already occupied.")
         return
     all_captured = []
@@ -74,6 +78,7 @@ def play(coordinates):
             captured = rules(grid, current_player, (x, y), dx, dy)
             all_captured.extend(captured)
     if not all_captured:
+        messagebox.showerror("Invalid Move", "Invalid move, no pieces captured.")
         print("Invalid move, no pieces captured.")
         return
     grid[y][x] = current_player

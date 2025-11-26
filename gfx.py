@@ -29,12 +29,13 @@ def pos_to_case(pos,long,larg):
     )
 
 def draw_line(screen, start, end, color=BLACK):
+    line_larger =int(core.TILE_SIZE/14)
     pygame.draw.line(
         screen,
         color,
         (start[0] * core.TILE_SIZE, start[1] * core.TILE_SIZE),
         (end[0] * core.TILE_SIZE, end[1] * core.TILE_SIZE),
-        7
+        line_larger
     )
 
 def draw_grid_lines(screen, long,larg):

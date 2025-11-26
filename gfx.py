@@ -80,6 +80,12 @@ def draw_star(coordinates, player):
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 
+def draw_hover_star(coordinates):
+    x, y = coordinates
+    star = pygame.image.load("Assets/star.png")  # image jaune
+    star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
+    screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
+
 def load_player():
     for x in range(len(core.grid)):
         for y in range(len(core.grid[x])):
@@ -89,35 +95,24 @@ def load_player():
                 draw_player((y, x), 1)
 
 def check_legal_moves(player):
-    legal_move = []
-    for dx in [-1, 0, 1]:
-        for dy in [-1, 0, 1]:
-            if dx == 0 and dy == 0:
-                continue
-            for x in range(core.BOARD_WIDTH):
-                for y in range(core.BOARD_HEIGHT):
-                    if core.grid[y][x] is None:
+    legal_moves = []
+    for x in range(core.BOARD_WIDTH):
+        for y in range(core.BOARD_HEIGHT):
+            if core.grid[y][x] is None:
+                for dx in [-1, 0, 1]:
+                    for dy in [-1, 0, 1]:
+                        if dx == 0 and dy == 0:
+                            continue
                         captured = core.rules(core.grid, player, (x, y), dx, dy)
                         if captured:
-                            legal_move.append((x, y))
-                            draw_star((x, y), player)
+                            legal_moves.append((x, y))
+                            # dès qu'une direction capture, c'est un coup légal -> passer à la case suivante
+                            dx = dy = None
                             break
-
-def run_othello():
-    running = True
-    while running:
-        screen.fill(GREEN)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
-                print(case)
-                core.play(case)
-        
-
-        # Répéter le bloc 8x8 (background_tile) pour couvrir dynamiquement la taille du plateau (code de copilot UNIQUEMENT pour répéter l'arrière plan)
+                    if dx is None:
+                        break
+    return legal_moves
+def repeat_bg() :
         board_px_w = core.BOARD_WIDTH * core.TILE_SIZE
         board_px_h = core.BOARD_HEIGHT * core.TILE_SIZE
         tile_w = background_tile.get_width()
@@ -125,8 +120,37 @@ def run_othello():
         for bx in range(0, board_px_w, tile_w):
             for by in range(0, board_px_h, tile_h):
                 screen.blit(background_tile, (bx, by))
+
+def place_star(pos):
+    legal_moves = check_legal_moves(core.current_player)
+    mouse_case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
+
+    for move in legal_moves:
+        if move == mouse_case:
+            draw_hover_star(move)
+        else:
+            draw_star(move, core.current_player)
+
+def run_othello():
+    running = True
+    while running:
+        pos = pygame.mouse.get_pos()
+        screen.fill(GREEN)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                
+                case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
+                print(case)
+                core.play(case)
+        
+
+        # Répéter le bloc 8x8 (background_tile) pour couvrir dynamiquement la taille du plateau (code de copilot UNIQUEMENT pour répéter l'arrière plan)
+        repeat_bg()
  
         load_player()
-        check_legal_moves(core.current_player)
+        
+        place_star(pos)
         draw_grid_lines(screen,core.BOARD_HEIGHT,core.BOARD_WIDTH)# draw_grid()
         pygame.display.flip()  # Met à jour l’écran

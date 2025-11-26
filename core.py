@@ -31,7 +31,7 @@ grid = create_grid(BOARD_HEIGHT,BOARD_WIDTH)
 print(grid)
 
 def is_on_board(x, y):
-    return 0 <= x < BOARD_WIDTH and 0 <= y < BOARD_HEIGHT #Idée de copilot pour simplifier la condition
+    return 0 <= x < BOARD_WIDTH and 0 <= y < BOARD_HEIGHT #Idée de copilot, parce que je n'avais pas d'idée de comment faire. Comment faire pour faire une fonction qui regarde si le pion est bien dans le
 
 def rules(grid, player, coordinates, dx, dy):
     captured = []

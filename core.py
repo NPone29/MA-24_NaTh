@@ -1,5 +1,9 @@
 import gfx
 
+BOARD_WIDTH = 8
+BOARD_HEIGHT = 8
+TILE_SIZE = 100
+
 def create_grid(long,larg):
     grid = []
     for i in range(long):
@@ -19,13 +23,6 @@ def create_grid(long,larg):
     return grid
 
 
-
-
-
-
-BOARD_WIDTH = 8
-BOARD_HEIGHT = 8
-TILE_SIZE = 100
 
 grid = create_grid(BOARD_HEIGHT,BOARD_WIDTH)
 print(grid)
@@ -61,8 +58,7 @@ def play(coordinates):
             grid[y][x] = current_player
             gfx.draw_player((y, x), current_player)
     else:
-        color =grid[y][x]
-        change_color(color,coordinates)
+        print("impossible move !")
         return
 
     current_player = get_next_player(current_player)

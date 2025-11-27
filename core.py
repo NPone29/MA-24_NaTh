@@ -116,9 +116,25 @@ def gameover() :
     global gamerun
     gamerun = False
 
+    score_player1 = 0
+    score_player2 = 0
+
+    for x in range(len(grid)):
+        for y in range(len(grid[x])):
+            if grid[x][y] == 0:
+                score_player1 +=1
+            if grid[x][y] == 1:
+                score_player2 +=1
+
+    if score_player2 > score_player1 :
+        winnerplayer = "Player_2"
+
+    elif score_player1 > score_player2 :
+        winnerplayer = "Player_1"
+    else :
+        winnerplayer = None
+
     gfx.loadscreen()
 
-    gfx.draw_gameover(current_player)
+    gfx.draw_gameover(winnerplayer,score_player1,score_player2)
 
-
-    print("the game is over")

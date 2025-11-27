@@ -6,7 +6,7 @@ pygame.font.init()
 
 FONT_DEFAULT = pygame.font.SysFont("Arial", 28)
 TITLE_FONT = pygame.font.SysFont("Georgia", 38)
-UNDER_TITLE_FONT = pygame.font.SysFont("Georgia", 8)
+UNDER_TITLE_FONT = pygame.font.SysFont("Georgia", 18)
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -153,7 +153,7 @@ def draw_text(text, pos, font=FONT_DEFAULT, color=BLACK, center=False):
         rect = surf.get_rect(topleft=pos)
     screen.blit(surf, rect)
 
-def draw_gameover(winner) :
+def draw_gameover(winner,score_1, score_2) :
     # hauteur = 2 cases, largeur = largeur du plateau, centré verticalement
     rect_h = core.TILE_SIZE * 2
     rect_w = core.TILE_SIZE * core.BOARD_WIDTH
@@ -161,9 +161,20 @@ def draw_gameover(winner) :
     rect_x = 0
     rect_y = (board_h - rect_h) // 2  # centre vertical
     pygame.draw.rect(screen, WHITE, (rect_x, rect_y, rect_w, rect_h), 0)
-    name = "Bleu"
-    msg = f"Fin de la partie — {name} gagne"
-    draw_text(msg, (rect_x + rect_w // 2, rect_y + rect_h // 2), color=BLACK, center=True)
+
+    if winner == "Player_1" :
+        msg = f"End of the game, the Blues won ! — {score_1} to {score_2}"
+        color_winner = BLUE
+    elif winner == "Player_2":
+        msg = f"End of the game, the Reds won ! — {score_2} to {score_1}"
+        color_winner = RED
+    elif winner == None :
+        msg = f"Fin de la partie, égalité ! — {score_2} to {score_1}"
+        color_winner = BLACK
+    
+        
+    draw_text(msg, (rect_x + rect_w // 2, rect_y + rect_h // 2),font=TITLE_FONT, color=color_winner, center=True)
+    draw_text("click to continue", (rect_x + rect_w // 2, rect_y + rect_h // 2 + core.TILE_SIZE // 3),font=UNDER_TITLE_FONT, color=BLACK, center=True)
     pygame.display.flip()
 
 
@@ -176,16 +187,18 @@ def run_othello():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun == True:
-                
                 case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
                 print(case)
                 core.play(case)
-
+            if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun == False:
+                pygame.quit()
+                from start_menu import menu
+                menu.afficher_menu()
+                return
         core.skip_player()
 
         if core.gamerun == True:
             loadscreen()
             place_star(pos)
             pygame.display.flip()  # Met à jour l’écran
-
         

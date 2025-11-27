@@ -2,6 +2,11 @@ import pygame
 import core
 
 pygame.init()
+pygame.font.init()
+
+FONT_DEFAULT = pygame.font.SysFont("Arial", 28)
+TITLE_FONT = pygame.font.SysFont("Georgia", 38)
+UNDER_TITLE_FONT = pygame.font.SysFont("Georgia", 8)
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -123,6 +128,7 @@ def repeat_bg() :
 
 def place_star(pos):
     legal_moves = check_legal_moves(core.current_player)
+
     mouse_case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
 
     for move in legal_moves:
@@ -130,6 +136,36 @@ def place_star(pos):
             draw_hover_star(move)
         else:
             draw_star(move, core.current_player)
+
+def loadscreen():
+
+    repeat_bg()# Répéter le bloc 8x8 (background_tile) pour couvrir dynamiquement la taille du plateau (code de copilot UNIQUEMENT pour répéter l'arrière plan)
+    draw_grid_lines(screen,core.BOARD_HEIGHT,core.BOARD_WIDTH)# draw_grid()
+
+    load_player()
+
+def draw_text(text, pos, font=FONT_DEFAULT, color=BLACK, center=False):
+    """Dessine du texte sur l'écran. pos = (x,y). Si center=True, pos est le centre."""
+    surf = font.render(str(text), True, color)
+    if center:
+        rect = surf.get_rect(center=pos)
+    else:
+        rect = surf.get_rect(topleft=pos)
+    screen.blit(surf, rect)
+
+def draw_gameover(winner) :
+    # hauteur = 2 cases, largeur = largeur du plateau, centré verticalement
+    rect_h = core.TILE_SIZE * 2
+    rect_w = core.TILE_SIZE * core.BOARD_WIDTH
+    board_h = core.TILE_SIZE * core.BOARD_HEIGHT
+    rect_x = 0
+    rect_y = (board_h - rect_h) // 2  # centre vertical
+    pygame.draw.rect(screen, WHITE, (rect_x, rect_y, rect_w, rect_h), 0)
+    name = "Bleu"
+    msg = f"Fin de la partie — {name} gagne"
+    draw_text(msg, (rect_x + rect_w // 2, rect_y + rect_h // 2), color=BLACK, center=True)
+    pygame.display.flip()
+
 
 def run_othello():
     running = True
@@ -139,18 +175,17 @@ def run_othello():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun == True:
                 
                 case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
                 print(case)
                 core.play(case)
-        
 
-        # Répéter le bloc 8x8 (background_tile) pour couvrir dynamiquement la taille du plateau (code de copilot UNIQUEMENT pour répéter l'arrière plan)
-        repeat_bg()
- 
-        load_player()
+        core.skip_player()
+
+        if core.gamerun == True:
+            loadscreen()
+            place_star(pos)
+            pygame.display.flip()  # Met à jour l’écran
+
         
-        place_star(pos)
-        draw_grid_lines(screen,core.BOARD_HEIGHT,core.BOARD_WIDTH)# draw_grid()
-        pygame.display.flip()  # Met à jour l’écran

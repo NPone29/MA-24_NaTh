@@ -1,11 +1,11 @@
-import gfx
-import pygame
-import tkinter as tk
-from tkinter import messagebox
+
 
 BOARD_WIDTH = 8 #max 19
 BOARD_HEIGHT = 8 #max 10
 TILE_SIZE = 100
+
+skipped =False
+gamerun = True
 
 def create_grid(long,larg):
     grid = []
@@ -95,3 +95,30 @@ def change_color(color,pos):
         print("error, can't replace color at ",y,x)
 
 
+def skip_player():
+    import gfx
+    global skipped, current_player
+
+    legal_moves = gfx.check_legal_moves(current_player)
+
+    if not legal_moves :
+        if skipped == True :
+            gameover()
+        else :
+            current_player = get_next_player(current_player)
+            print(current_player," skipped")
+            skipped = True
+    else :
+        skipped = False
+
+def gameover() :
+    import gfx
+    global gamerun
+    gamerun = False
+
+    gfx.loadscreen()
+
+    gfx.draw_gameover(current_player)
+
+
+    print("the game is over")

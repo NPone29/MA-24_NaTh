@@ -42,17 +42,16 @@ check = Checkbutton(root, text="Sound", variable=sound)
 check.pack(pady=10)
 
 def valider():
-    global root
     board_size = int(scale.get())
     selected_background = choix.get()
-    sound_option = sound.get()
-    if sound_option ==  0:
-        sound_option = "Off"
-    else:
-        sound_option = "On"
+    sound_option = "On" if sound.get() else "Off"
     messagebox.showinfo("Settings", f"Board Size: {board_size}\nSelected background: {selected_background}\nSound option: {sound_option}")
-    root.destroy()
+
+    root.destroy()  # fermer la fenêtre current avant de recréer le menu
+
+    import importlib
     import start_menu.menu as menu
+    importlib.reload(menu)  # idée de copilot pour recharger le module (Pourquoi est ce que j'ai cette erreur ?)
     menu.afficher_menu()
 
 validate_button = Button(root, text="Validate", command=valider)

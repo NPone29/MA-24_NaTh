@@ -1,7 +1,7 @@
 
 
 BOARD_WIDTH = 8 #max 19
-BOARD_HEIGHT = 8 #max 10
+BOARD_HEIGHT = 8  #max 10
 TILE_SIZE = 100
 
 skipped =False
@@ -81,18 +81,9 @@ def play(coordinates):
         return
     grid[y][x] = current_player
     for cx, cy in all_captured:
-        grid[cy][cx] = current_player
+        grid[cy][cx] = current_player + 0.1
 
     current_player = get_next_player(current_player)
-
-def change_color(color,pos):
-    x,y = pos
-    if color == 0:
-        grid[y][x] = 1
-    elif color ==1:
-        grid[y][x] = 0
-    else :
-        print("error, can't replace color at ",y,x)
 
 
 def skip_player():

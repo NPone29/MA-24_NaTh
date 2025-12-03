@@ -19,12 +19,27 @@ GREEN =(20, 163, 58)
 screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE])
 pygame.display.set_caption("MA-24 : Othello game")
 
-background_image = pygame.image.load("Assets/flowery_background.png").convert()
+background_image = pygame.image.load("Assets/backgrounds/sky_background.png").convert()
 background_tile = pygame.transform.scale(background_image, (core.TILE_SIZE * 8, core.TILE_SIZE * 8))
 
 gameIcon = pygame.image.load("Assets/icon.png")
 pygame.display.set_icon(gameIcon)
 
+# préchargement et mise à l'échelle (une seule fois)
+def _load_scaled(path):
+    return pygame.transform.scale(pygame.image.load(path).convert_alpha(), (core.TILE_SIZE, core.TILE_SIZE))
+
+BLUE_PAWN     = _load_scaled("Assets/pawns/blue_pawn.png")
+BLUE_FR1      = _load_scaled("Assets/pawns/blue_pawn_fr1.png")
+BLUE_FR2      = _load_scaled("Assets/pawns/blue_pawn_fr2.png")
+BLUE_FR3      = _load_scaled("Assets/pawns/blue_pawn_fr3.png")
+RED_PAWN      = _load_scaled("Assets/pawns/red_pawn.png")
+RED_FR1       = _load_scaled("Assets/pawns/red_pawn_fr1.png")
+RED_FR2       = _load_scaled("Assets/pawns/red_pawn_fr2.png")
+RED_FR3       = _load_scaled("Assets/pawns/red_pawn_fr3.png")
+
+ANIM_INTERVAL_MS = 100
+_anim_timestamps = {}  # clé = (x,y) -> dernier tick d'avancement
 
 
 def pos_to_case(pos,long,larg):
@@ -57,47 +72,86 @@ def draw_grid_lines(screen, long,larg):
     for i in range(larg-1):
         draw_line(screen, (0, i+1), (max,i+1))
 
+
 def draw_player(coordinates, player):
-    blue_pawn = pygame.image.load("Assets/blue_pawn.png")
-    red_pawn = pygame.image.load("Assets/red_pawn.png")
+    # coordinates = (col, row)
+    col, row = coordinates
+    x, y = col, row
 
-    x, y = coordinates # Idée de copilot pour décomposer les coordonnées
+    # sécurité indexation
+    if y < 0 or y >= len(core.grid) or x < 0 or x >= len(core.grid[y]):
+        return
+
+    val = core.grid[y][x]
     pixel = (x * core.TILE_SIZE, y * core.TILE_SIZE)
+    key = (x, y)
 
-    if player == 0:
-        bleu_pawn = pygame.transform.scale(blue_pawn, (core.TILE_SIZE, core.TILE_SIZE))
+    # faire avancer l'animation si la valeur est float (ex: 0.1/0.2/0.3 ou 1.1/1.2/1.3)
+    if isinstance(val, float):
+        base = int(val)
+        frac = round(val - base, 1)  # on attend 0.1, 0.2, 0.3
+        now = pygame.time.get_ticks()
+        last = _anim_timestamps.get(key)
+        if last is None:
+            _anim_timestamps[key] = now
+        elif now - last >= ANIM_INTERVAL_MS:
+            if frac < 0.3:
+                # avance une étape d'animation
+                core.grid[y][x] = round(val + 0.1, 1)
+                _anim_timestamps[key] = now
+            else:
+                # dernière étape : valeur entière finale
+                core.grid[y][x] = base
+                _anim_timestamps.pop(key, None)
+        # relire la valeur après possible modification
+        val = core.grid[y][x]
 
-        rect = bleu_pawn.get_rect(topleft=pixel)
-        screen.blit(bleu_pawn, rect)
-    elif player == 1:
+    # choisir l'image selon la valeur courante
+    cur = round(val, 1) if isinstance(val, float) else val
 
-        red_pawn = pygame.transform.scale(red_pawn, (core.TILE_SIZE, core.TILE_SIZE))
+    if cur == 0:
+        img = BLUE_PAWN
+    elif cur == 1.1:
+        img = BLUE_FR1
+    elif cur == 1.2:
+        img = BLUE_FR2
+    elif cur == 1.3:
+        img = BLUE_FR3
+    elif cur == 1:
+        img = RED_PAWN
+    elif cur == 0.1:
+        img = RED_FR1
+    elif cur == 0.2:
+        img = RED_FR2
+    elif cur == 0.3:
+        img = RED_FR3
+    else:
+        return
 
-        rect = red_pawn.get_rect(topleft=pixel)
-        screen.blit(red_pawn, rect)
-        
+    screen.blit(img, pixel)
+
 def draw_star(coordinates, player):
     x, y = coordinates
     if player == 0:
-        star = pygame.image.load("Assets/blue_star.png")
+        star = pygame.image.load("Assets/stars/blue_star.png")
     else:
-        star = pygame.image.load("Assets/red_star.png")
+        star = pygame.image.load("Assets/stars/red_star.png")
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 
 def draw_hover_star(coordinates):
     x, y = coordinates
-    star = pygame.image.load("Assets/star.png")  # image jaune
+    star = pygame.image.load("Assets/stars/star.png")  # image jaune
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 
 def load_player():
-    for x in range(len(core.grid)):
-        for y in range(len(core.grid[x])):
-            if core.grid[x][y] == 0:
-                draw_player((y, x), 0)
-            elif core.grid[x][y] == 1:
-                draw_player((y, x), 1)
+    # parcourt par ligne (y) puis colonne (x) — indexation cohérente grid[y][x]
+    for y in range(len(core.grid)):
+        for x in range(len(core.grid[y])):
+            val = core.grid[y][x]
+            if val is not None:
+                draw_player((x, y), val)
 
 def check_legal_moves(player):
     legal_moves = []
@@ -180,25 +234,26 @@ def draw_gameover(winner,score_1, score_2) :
 
 def run_othello():
     running = True
+    clock = pygame.time.Clock()
     while running:
         pos = pygame.mouse.get_pos()
         screen.fill(GREEN)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun == True:
+            if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun:
                 case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
-                print(case)
-                core.play(case)
-            if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun == False:
+                core.play(case)  # core.play doit gérer la validation et appeler skip_player() si nécessaire
+            if event.type == pygame.MOUSEBUTTONDOWN and not core.gamerun:
                 pygame.quit()
-                from start_menu import menu
-                menu.afficher_menu()
+                import main
                 return
-        core.skip_player()
 
-        if core.gamerun == True:
+        # NB: ne pas appeler core.skip_player() chaque frame ici (provoque fin instantanée)
+        # l'appel à skip_player() doit être fait depuis core.play() après un coup valide.
+        core.skip_player()
+        if core.gamerun:
             loadscreen()
             place_star(pos)
-            pygame.display.flip()  # Met à jour l’écran
-        
+            pygame.display.flip()
+        clock.tick(60)

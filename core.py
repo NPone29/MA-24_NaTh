@@ -1,9 +1,12 @@
+import json
+json_file_path = "settings.json"
+with open(json_file_path, 'r') as json_file:
+    config = json.load(json_file)
 
-BOARD_WIDTH = 8 #max 19
-BOARD_HEIGHT = 8 #max 10
-TILE_SIZE = 100
-
-BACKGROUND_IMAGE_PATH = "Assets/background.png"
+BACKGROUND_IMAGE_PATH = config.get("BACKGROUND_IMAGE_PATH")
+BOARD_WIDTH = config.get("BOARD_WIDTH")
+BOARD_HEIGHT = config.get("BOARD_HEIGHT")
+TILE_SIZE = config.get("TILE_SIZE")
 
 skipped =False
 gamerun = True

@@ -13,13 +13,13 @@ WHITE = (255, 255, 255)
 BLUE = (0, 0, 128)
 RED = (200, 0, 0)
 GREEN =(20, 163, 58)
-
+GRAY =(40, 40, 40)
 
 
 screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE])
 pygame.display.set_caption("MA-24 : Othello game")
 
-background_image = pygame.image.load("Assets/backgrounds/sky_background.png").convert()
+background_image = pygame.image.load("Assets/backgrounds/space_background.png").convert()
 background_tile = pygame.transform.scale(background_image, (core.TILE_SIZE * 8, core.TILE_SIZE * 8))
 
 gameIcon = pygame.image.load("Assets/icon.png")
@@ -49,7 +49,7 @@ def pos_to_case(pos,long,larg):
     )
 
 def draw_line(screen, start, end, color=BLACK):
-    line_larger =int(core.TILE_SIZE/14)
+    line_larger =int(core.TILE_SIZE/18)
     pygame.draw.line(
         screen,
         color,
@@ -66,11 +66,11 @@ def draw_grid_lines(screen, long,larg):
         max = larg
 
     for i in range(larg-1):
-        draw_line(screen, (i+1, 0), (i+1,max))
+        draw_line(screen, (i+1, 0), (i+1,max), GRAY)
 
     # horizontal lines
     for i in range(larg-1):
-        draw_line(screen, (0, i+1), (max,i+1))
+        draw_line(screen, (0, i+1), (max,i+1), GRAY)
 
 
 def draw_player(coordinates, player):

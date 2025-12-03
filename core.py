@@ -1,5 +1,4 @@
 
-
 BOARD_WIDTH = 8 #max 19
 BOARD_HEIGHT = 8  #max 10
 TILE_SIZE = 100

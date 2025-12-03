@@ -24,7 +24,7 @@ def run_settings(parent=None):
     def afficher_valeur(valeur):
         value_label.config(text=f"Value selected: {int(float(valeur))}")
 
-    scale = Scale(win, from_=4, to=25, orient="horizontal", length=300, command=afficher_valeur)
+    scale = Scale(win, from_=4, to=20, orient="horizontal", length=300, command=afficher_valeur)
 
     current_value_size = json.load(open("settings.json")).get("BOARD_WIDTH",8)
     scale.set(current_value_size)

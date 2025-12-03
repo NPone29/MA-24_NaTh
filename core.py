@@ -1,8 +1,9 @@
 
-
 BOARD_WIDTH = 8 #max 19
 BOARD_HEIGHT = 8 #max 10
 TILE_SIZE = 100
+
+BACKGROUND_IMAGE_PATH = "Assets/background.png"
 
 skipped =False
 gamerun = True

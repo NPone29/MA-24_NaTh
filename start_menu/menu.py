@@ -2,12 +2,11 @@ from tkinter import *
 from tkinter import messagebox
 
 def afficher_credit():
-    messagebox.showinfo("Credits", "Ton texte de crédits ici")
+    messagebox.showinfo("Credits", "Developed by NPone29 and EscorpionTheo.")
 
 def open_setting(root):
-    root.destroy()
     import start_menu.setting as setting
-    setting.run_settings()
+    setting.run_settings(root)
 
 def open_othello(root):
     root.destroy()

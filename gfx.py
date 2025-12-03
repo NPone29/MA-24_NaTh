@@ -19,7 +19,8 @@ GREEN =(20, 163, 58)
 screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE])
 pygame.display.set_caption("MA-24 : Othello game")
 
-background_image = pygame.image.load("Assets/flowery_background.png").convert()
+load_background = core.BACKGROUND_IMAGE_PATH
+background_image = pygame.image.load(load_background).convert()
 background_tile = pygame.transform.scale(background_image, (core.TILE_SIZE * 8, core.TILE_SIZE * 8))
 
 gameIcon = pygame.image.load("Assets/icon.png")

@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
+from PIL import Image, ImageTk
+
 
 def afficher_credit():
     messagebox.showinfo("Credits", "Developed by NPone29 and EscorpionTheo.")
@@ -16,21 +18,25 @@ def open_othello(root):
 def afficher_menu():
     root = Tk()
     root.title("Othello Menu")
-    root.geometry("350x400")
+    root.geometry("450x500")
 
-    image_frame = Frame(root, height=300)
-    image_frame.pack(side=TOP, fill=X)
+    original_image = Image.open("Assets/backgrounds/menu_background.png")
+    bg_resized = original_image.resize((450, 500), Image.LANCZOS)
+    bg = ImageTk.PhotoImage(bg_resized)
 
-    button_frame = Frame(root, height=100)
-    button_frame.pack(side=TOP, fill=X, pady=10)
+    canvas = Canvas(root, width=350, height=400, highlightthickness=0)
+    canvas.pack(fill="both", expand=True)
 
-    credit_button = Button(button_frame, text="Credit", width=10, height=3, command=afficher_credit)
-    credit_button.pack(side=LEFT, expand=True, padx=10, pady=5)
+    canvas.create_image(0, 0, image=bg, anchor="nw")
+    root._bg_image = bg
 
-    play_button = Button(button_frame, text="Play", width=10, height=3, command=lambda: open_othello(root))
-    play_button.pack(side=LEFT, expand=True, padx=10, pady=5)
+    play_button = Button(root, text="Play", width=15, height=2, command=lambda: open_othello(root))
+    play_button.place(relx=0.5, rely=0.4, anchor="n")
 
-    setting_button = Button(button_frame, text="Setting", width=10, height=3, command=lambda: open_setting(root))
-    setting_button.pack(side=LEFT, expand=True, padx=10, pady=5)
+    credit_button = Button(root, text="Credit", width=15, height=2, command=afficher_credit)
+    credit_button.place(relx=0.5, rely=0.5, anchor="n")
+
+    setting_button = Button(root, text="Setting", width=15, height=2, command=lambda: open_setting(root))
+    setting_button.place(relx=0.5, rely=0.6, anchor="n")
 
     root.mainloop()

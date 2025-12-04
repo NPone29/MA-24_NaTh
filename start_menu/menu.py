@@ -39,4 +39,7 @@ def afficher_menu():
     setting_button = Button(root, text="Setting", width=15, height=2, command=lambda: open_setting(root))
     setting_button.place(relx=0.5, rely=0.6, anchor="n")
 
+    leave_button = Button(root, text="Leave", width=15, height=2, command=root.quit)
+    leave_button.place(relx=0.5, rely=0.7, anchor="n")
+
     root.mainloop()

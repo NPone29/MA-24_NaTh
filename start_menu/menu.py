@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import sound
 
 def afficher_credit():
     messagebox.showinfo("Credits", "Developed by NPone29 and EscorpionTheo.")
@@ -9,11 +10,14 @@ def open_setting(root):
     setting.run_settings(root)
 
 def open_othello(root):
+    sound.play_start()
+    sound.stop_menu()
     root.destroy()
     import gfx
     gfx.run_othello()
 
 def afficher_menu():
+    sound.play_menu(loop=True)
     root = Tk()
     root.title("Othello Menu")
     root.geometry("350x400")

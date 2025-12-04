@@ -1,4 +1,6 @@
 import json
+import sound
+
 json_file_path = "settings.json"
 with open(json_file_path, 'r') as json_file:
     config = json.load(json_file)
@@ -7,7 +9,6 @@ BACKGROUND_IMAGE_PATH = config.get("BACKGROUND_IMAGE_PATH")
 BOARD_WIDTH = config.get("BOARD_WIDTH")
 BOARD_HEIGHT = config.get("BOARD_HEIGHT")
 TILE_SIZE = config.get("TILE_SIZE")
-
 
 skipped =False
 gamerun = True
@@ -87,6 +88,11 @@ def play(coordinates):
     grid[y][x] = current_player
     for cx, cy in all_captured:
         grid[cy][cx] = current_player + 0.1
+
+    # Exemple de boucle de flip (ajustez selon votre code réel)
+    for (fx, fy) in all_captured:
+        grid[fy][fx] = current_player + 0.1  # vous inversez ici le pion
+        sound.play_pop()          # jouer le pop pour CE pion
 
     current_player = get_next_player(current_player)
 

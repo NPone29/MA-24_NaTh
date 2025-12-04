@@ -35,11 +35,11 @@ def run_settings(parent=None):
     background_label.pack()
 
     current_background = json.load(open("settings.json")).get("BACKGROUND_IMAGE_PATH", "Assets/background.png")
-    if current_background == "Assets/background.png":
+    if current_background == "Assets/backgrounds/background.png":
         choix_value = "default"
-    elif current_background == "Assets/flowery_background.png":
+    elif current_background == "Assets/backgrounds/flowery_background.png":
         choix_value = "flowerly"
-    elif current_background == "Assets/sky_background.png":
+    elif current_background == "Assets/backgrounds/sky_background.png":
         choix_value = "sky"
     else:
         choix_value = "space"
@@ -70,7 +70,7 @@ def run_settings(parent=None):
         config = {
             "BOARD_WIDTH": board_size,
             "BOARD_HEIGHT": board_size,
-            "BACKGROUND_IMAGE_PATH": "Assets/background.png" if selected_background == "default" else "Assets/flowery_background.png" if selected_background == "flowerly" else "Assets/sky_background.png" if selected_background == "sky" else "Assets/space_background.png",
+            "BACKGROUND_IMAGE_PATH": "Assets/backgrounds/background.png" if selected_background == "default" else "Assets/backgrounds/flowery_background.png" if selected_background == "flowerly" else "Assets/backgrounds/sky_background.png" if selected_background == "sky" else "Assets/backgrounds/space_background.png",
             "TILE_SIZE": 100 if board_size <= 10 else 50,
             "sound": sound.get()
         }

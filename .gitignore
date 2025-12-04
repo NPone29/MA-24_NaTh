@@ -1,6 +1,8 @@
 # Ignore Python bytecode caches
 __pycache__/
 **/__pycache__/
+.idea/
+**/__idea__/
 
 # Ignore compiled Python files
 *.py[cod]

@@ -1,6 +1,7 @@
 import pygame
 import core
 import json
+import sound
 
 pygame.init()
 pygame.font.init()
@@ -99,51 +100,6 @@ def draw_player(coordinates, player):
 
     val = core.grid[y][x]
     pixel = (x * core.TILE_SIZE, y * core.TILE_SIZE)
-    key = (x, y)
-
-    # faire avancer l'animation si la valeur est float (ex: 0.1/0.2/0.3 ou 1.1/1.2/1.3)
-    if isinstance(val, float):
-        base = int(val)
-        frac = round(val - base, 1)  # on attend 0.1, 0.2, 0.3
-        now = pygame.time.get_ticks()
-        last = _anim_timestamps.get(key)
-        if last is None:
-            _anim_timestamps[key] = now
-        elif now - last >= ANIM_INTERVAL_MS:
-            if frac < 0.3:
-                # avance une étape d'animation
-                core.grid[y][x] = round(val + 0.1, 1)
-                _anim_timestamps[key] = now
-            else:
-                # dernière étape : valeur entière finale
-                core.grid[y][x] = base
-                _anim_timestamps.pop(key, None)
-        # relire la valeur après possible modification
-        val = core.grid[y][x]
-
-    # choisir l'image selon la valeur courante
-    cur = round(val, 1) if isinstance(val, float) else val
-
-    if cur == 0:
-        img = BLUE_PAWN
-    elif cur == 1.1:
-        img = BLUE_FR1
-    elif cur == 1.2:
-        img = BLUE_FR2
-    elif cur == 1.3:
-        img = BLUE_FR3
-    elif cur == 1:
-        img = RED_PAWN
-    elif cur == 0.1:
-        img = RED_FR1
-    elif cur == 0.2:
-        img = RED_FR2
-    elif cur == 0.3:
-        img = RED_FR3
-    else:
-        return
-
-    screen.blit(img, pixel)
 
     key = (x, y)
 
@@ -188,7 +144,7 @@ def draw_player(coordinates, player):
         img = RED_FR3
     else:
         return
-
+    
     screen.blit(img, pixel)
 
 def draw_star(coordinates, player):

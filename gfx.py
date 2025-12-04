@@ -1,5 +1,6 @@
 import pygame
 import core
+import json
 import sound
 
 pygame.init()
@@ -50,11 +51,16 @@ def pos_to_case(pos,long,larg):
         int(pos[1] / core.TILE_SIZE) % long,
     )
 
-def draw_line(screen, start, end, color=BLACK):
+def draw_line(screen, start, end):
+
+    json_file_path = "settings.json"
+    with open(json_file_path, 'r') as json_file:
+        config = json.load(json_file)
+
     line_larger =int(core.TILE_SIZE/18)
     pygame.draw.line(
         screen,
-        color,
+        config.get("LINE_COLOR", BLACK),
         (start[0] * core.TILE_SIZE, start[1] * core.TILE_SIZE),
         (end[0] * core.TILE_SIZE, end[1] * core.TILE_SIZE),
         line_larger
@@ -68,11 +74,11 @@ def draw_grid_lines(screen, long,larg):
         max = larg
 
     for i in range(larg-1):
-        draw_line(screen, (i+1, 0), (i+1,max),GRAY)
+        draw_line(screen, (i+1, 0), (i+1,max))
 
     # horizontal lines
     for i in range(larg-1):
-        draw_line(screen, (0, i+1), (max,i+1), GRAY)
+        draw_line(screen, (0, i+1), (max,i+1))
 
 def draw_player(coordinates, player):
     # coordinates = (col, row)

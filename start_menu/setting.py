@@ -72,7 +72,8 @@ def run_settings(parent=None):
             "BOARD_HEIGHT": board_size,
             "BACKGROUND_IMAGE_PATH": "Assets/backgrounds/background.png" if selected_background == "default" else "Assets/backgrounds/flowery_background.png" if selected_background == "flowerly" else "Assets/backgrounds/sky_background.png" if selected_background == "sky" else "Assets/backgrounds/space_background.png",
             "TILE_SIZE": 100 if board_size <= 10 else 50,
-            "sound": sound.get()
+            "sound": sound.get(),
+            "LINE_COLOR": (255, 255, 255) if selected_background == "space" else (0, 0, 0)
         }
         with open("settings.json", 'w') as json_file:
             json.dump(config, json_file)

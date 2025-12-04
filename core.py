@@ -8,9 +8,6 @@ BOARD_WIDTH = config.get("BOARD_WIDTH")
 BOARD_HEIGHT = config.get("BOARD_HEIGHT")
 TILE_SIZE = config.get("TILE_SIZE")
 
-BOARD_WIDTH = 8 #max 19
-BOARD_HEIGHT = 8  #max 10
-TILE_SIZE = 100
 
 skipped =False
 gamerun = True

@@ -92,7 +92,9 @@ def run_settings(parent=None):
             with open("settings.json", 'w') as json_file:
                 json.dump(config, json_file)
             import sound as sd
+            sd.stop_menu()
             sd.init_sound()
+            sd.play_menu(True)
             win.destroy()
         elif status is False:
             win.destroy()

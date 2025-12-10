@@ -12,24 +12,24 @@ def run_settings(parent=None):
         own_mainloop = False
 
     win.title("Othello Setting")
-    win.geometry("300x350")
+    win.geometry("300x425")
 
     case_label = Label(win, text="The size of the board (number of squares per side):")
     case_label.pack()
 
     # Label pour afficher la valeur sélectionnée
-    value_label = Label(win, text="Valeur sélectionnée : 0")
-    value_label.pack()
+    case_value_label = Label(win, text="Value selected: 0")
+    case_value_label.pack()
 
-    def afficher_valeur(valeur):
-        value_label.config(text=f"Value selected: {int(float(valeur))}")
+    def afficher_valeur_case(valeur):
+        case_value_label.config(text=f"Value selected: {int(float(valeur))}")
 
-    scale = Scale(win, from_=4, to=20, orient="horizontal", length=300, command=afficher_valeur)
+    case_scale = Scale(win, from_=4, to=20, orient="horizontal", length=300, command=afficher_valeur_case)
 
     current_value_size = json.load(open("settings.json")).get("BOARD_WIDTH",8)
-    scale.set(current_value_size)
-    afficher_valeur(scale.get())
-    scale.pack(pady=20)
+    case_scale.set(current_value_size)
+    afficher_valeur_case(case_scale.get())
+    case_scale.pack(pady=20)
 
     background_label = Label(win, text="Choose your background:")
     background_label.pack()
@@ -56,34 +56,65 @@ def run_settings(parent=None):
     radio3.pack()
     radio4.pack()
 
+    sound_label = Label(win, text="Adjust the sound level:")
+    sound_label.pack()
+
+    sound_value_label = Label(win, text="Sound: 0")
+    sound_value_label.pack()
+
+    def afficher_valeur_sound(valeur):
+        sound_value_label.config(text=f"Sound: {int(float(valeur))}")
+
+    sound_scale = Scale(win, from_=0, to=100, orient="horizontal", length=300, command=afficher_valeur_sound)
+
     current_sound = json.load(open("settings.json")).get("sound", 0)
-    sound = IntVar(value=current_sound)
-    check = Checkbutton(win, text="Sound", variable=sound)
-    check.pack(pady=10)
+    current_sound = int(current_sound * 100)
+    sound_scale.set(current_sound)
+    afficher_valeur_sound(sound_scale.get())
+    sound_scale.pack(pady=20)
+
 
     def valider():
-        board_size = int(scale.get())
+        board_size = int(case_scale.get())
         selected_background = choix.get()
-        sound_option = 1 if sound.get() else 0
-        messagebox.showinfo("Settings", f"Board Size: {board_size}\nSelected background: {selected_background}\nSound option: {sound_option}")
-        import json
-        config = {
-            "BOARD_WIDTH": board_size,
-            "BOARD_HEIGHT": board_size,
-            "BACKGROUND_IMAGE_PATH": "Assets/backgrounds/background.png" if selected_background == "default" else "Assets/backgrounds/flowery_background.png" if selected_background == "flowerly" else "Assets/backgrounds/sky_background.png" if selected_background == "sky" else "Assets/backgrounds/space_background.png",
-            "TILE_SIZE": 100 if board_size <= 10 else 50,
-            "sound": sound.get(),
-            "LINE_COLOR": (255, 255, 255) if selected_background == "space" else (0, 0, 0)
-        }
-        with open("settings.json", 'w') as json_file:
-            json.dump(config, json_file)
-        import sound as sd
-        sd.init_sound()
+        sound_option = int(sound_scale.get())
+        status = messagebox.askyesnocancel("Settings", f"Here are the current settings\n\nBoard Size: {board_size}\nSelected background: {selected_background}\nSound option: {sound_option}%")
+        if status is True:
+            import json
+            config = {
+                "BOARD_WIDTH": board_size,
+                "BOARD_HEIGHT": board_size,
+                "BACKGROUND_IMAGE_PATH": "Assets/backgrounds/background.png" if selected_background == "default" else "Assets/backgrounds/flowery_background.png" if selected_background == "flowerly" else "Assets/backgrounds/sky_background.png" if selected_background == "sky" else "Assets/backgrounds/space_background.png",
+                "TILE_SIZE": 100 if board_size <= 10 else 50,
+                "sound": sound_option / 100,
+                "LINE_COLOR": (255, 255, 255) if selected_background == "space" else (0, 0, 0)
+            }
+            with open("settings.json", 'w') as json_file:
+                json.dump(config, json_file)
+            import sound as sd
+            sd.stop_menu()
+            sd.init_sound()
+            sd.play_menu(True)
+            win.destroy()
+        elif status is False:
+            win.destroy()
+        elif status is None:
+            pass
+    
+    btn_frame = Frame(win, height=20)
+    btn_frame.pack(fill=X, side=BOTTOM, pady=10)
+    validate_button = Button(btn_frame, text="Validate", command=valider, bg="green2", activebackground="green3")
+    validate_button.pack(side=RIGHT, padx=10, pady=0, ipadx=10, ipady=5)
 
-        win.destroy()  # ferme uniquement la fenêtre de settings
+    def reset_to_default():
+        case_scale.set(8)
+        afficher_valeur_case(case_scale.get())
+        choix.set("default")
+        sound_scale.set(50)
+        afficher_valeur_sound(sound_scale.get())
 
-    validate_button = Button(win, text="Validate", command=valider)
-    validate_button.pack(pady=20)
+    reset_button = Button(btn_frame, text="Reset", command=lambda: reset_to_default(), bg="tomato", activebackground="red3")
+    reset_button.pack(side=LEFT, padx=10, pady=0, ipadx=10, ipady=5)
 
     if own_mainloop:
         win.mainloop()

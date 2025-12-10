@@ -31,7 +31,7 @@ def play_pop():
         POP_SOUND.play()
         POP_SOUND.set_volume(sound_on)
 
-def play_menu(loop):
+def play_menu(loop=True):
     if MENU_SOUND:
         if loop == True:
             MENU_SOUND.play(loops=-1)

@@ -2,16 +2,7 @@ import json
 import sound
 
 json_file_path = "settings.json"
-with open(json_file_path, 'r') as json_file:
-    config = json.load(json_file)
 
-BACKGROUND_IMAGE_PATH = config.get("BACKGROUND_IMAGE_PATH")
-BOARD_WIDTH = config.get("BOARD_WIDTH")
-BOARD_HEIGHT = config.get("BOARD_HEIGHT")
-TILE_SIZE = config.get("TILE_SIZE")
-
-skipped =False
-gamerun = True
 
 def create_grid(long,larg):
     grid = []
@@ -32,14 +23,24 @@ def create_grid(long,larg):
     return grid
 
 
-
-grid = create_grid(BOARD_HEIGHT,BOARD_WIDTH)
-print(grid)
+def init_core():
+    global grid, skipped, gamerun, current_player,BACKGROUND_IMAGE_PATH,BOARD_WIDTH,BOARD_HEIGHT,TILE_SIZE
+    with open(json_file_path, 'r') as json_file:
+        config = json.load(json_file)
+    BACKGROUND_IMAGE_PATH = config.get("BACKGROUND_IMAGE_PATH")
+    BOARD_WIDTH = config.get("BOARD_WIDTH")
+    BOARD_HEIGHT = config.get("BOARD_HEIGHT")
+    TILE_SIZE = config.get("TILE_SIZE")
+    grid = create_grid(BOARD_HEIGHT,BOARD_WIDTH)
+    skipped =False
+    gamerun = True
+    current_player = Player_1
+    
+    
 
 Player_1 = 0
 Player_2 = 1
 
-current_player = Player_1
 
 def get_next_player(current_player):
     if current_player == Player_1:

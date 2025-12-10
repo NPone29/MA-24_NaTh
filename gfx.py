@@ -2,7 +2,6 @@ import pygame
 import core
 import json
 import sound
-
 pygame.init()
 pygame.font.init()
 
@@ -18,16 +17,20 @@ GREEN =(20, 163, 58)
 GRAY =(40, 40, 40)
 
 
-screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE])
-pygame.display.set_caption("MA-24 : Othello game")
+def start_othello():
+    core.init_core()
+    global screen, background_tile
+    screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE])
+    pygame.display.set_caption("MA-24 : Othello game")
 
-load_background = core.BACKGROUND_IMAGE_PATH
-background_image = pygame.image.load(load_background).convert()
-background_tile = pygame.transform.scale(background_image, (core.TILE_SIZE * 8, core.TILE_SIZE * 8))
+    load_background = core.BACKGROUND_IMAGE_PATH
+    background_image = pygame.image.load(load_background).convert()
+    background_tile = pygame.transform.scale(background_image, (core.TILE_SIZE * 8, core.TILE_SIZE * 8))
 
-gameIcon = pygame.image.load("Assets/icon.png")
-pygame.display.set_icon(gameIcon)
+    gameIcon = pygame.image.load("Assets/icon.png")
+    pygame.display.set_icon(gameIcon)
 
+start_othello()
 # préchargement et mise à l'échelle (une seule fois)
 def _load_scaled(path):
     return pygame.transform.scale(pygame.image.load(path).convert_alpha(), (core.TILE_SIZE, core.TILE_SIZE))
@@ -256,6 +259,7 @@ def draw_gameover(winner,score_1, score_2) :
 
 
 def run_othello():
+    start_othello()
     running = True
     clock = pygame.time.Clock()
     while running:
@@ -266,21 +270,16 @@ def run_othello():
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun == True:
                 case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
-                core.play(case)  # core.play doit gérer la validation et appeler skip_player() si nécessaire
+                core.play(case)
             if event.type == pygame.MOUSEBUTTONDOWN and not core.gamerun:
-                pygame.quit()
-                import main
-                return
-
-        # NB: ne pas appeler core.skip_player() chaque frame ici (provoque fin instantanée)
-        # l'appel à skip_player() doit être fait depuis core.play() après un coup valide.
-
-        # NB: ne pas appeler core.skip_player() chaque frame ici (provoque fin instantanée)
-        # l'appel à skip_player() doit être fait depuis core.play() après un coup valide.
+                running = False
+            
         core.skip_player()
         if core.gamerun:
             loadscreen()
             place_star(pos)
             pygame.display.flip()
         clock.tick(60)
-
+    pygame.display.quit()
+    from start_menu import menu
+    menu.afficher_menu()

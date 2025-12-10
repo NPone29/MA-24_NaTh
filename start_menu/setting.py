@@ -64,7 +64,7 @@ def run_settings(parent=None):
     def valider():
         board_size = int(scale.get())
         selected_background = choix.get()
-        sound_option = "On" if sound.get() else "Off"
+        sound_option = 1 if sound.get() else 0
         messagebox.showinfo("Settings", f"Board Size: {board_size}\nSelected background: {selected_background}\nSound option: {sound_option}")
         import json
         config = {
@@ -77,6 +77,8 @@ def run_settings(parent=None):
         }
         with open("settings.json", 'w') as json_file:
             json.dump(config, json_file)
+        import sound as sd
+        sd.init_sound()
 
         win.destroy()  # ferme uniquement la fenêtre de settings
 

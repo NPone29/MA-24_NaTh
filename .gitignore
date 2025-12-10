@@ -3,6 +3,13 @@ __pycache__/
 **/__pycache__/
 .idea/
 **/__idea__/
+.vscode/
+
+# Ignore project-specific settings file
+settings.json
+
+# Ignore folder with spaces in the name
+#Utile pour prog/
 
 # Ignore compiled Python files
 *.py[cod]

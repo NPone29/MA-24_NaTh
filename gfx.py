@@ -340,6 +340,7 @@ def pause_game():
 
 def run_othello():
     start_othello()
+    sound.play_game_music(True)
     running = True
     clock = pygame.time.Clock()
     while running:
@@ -370,5 +371,7 @@ def run_othello():
             pygame.display.flip()
         clock.tick(60)
     pygame.display.quit()
+    sound.stop_winner_music()
+    sound.stop_game_music()
     from start_menu import menu
     menu.afficher_menu()

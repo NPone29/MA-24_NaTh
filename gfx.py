@@ -17,13 +17,14 @@ GREEN   = (20, 163, 58)
 GRAY    = (40, 40, 40)
 ORANGE  = (255, 145, 0)
 
+chrono = core.Chronometre()
 
 def _load_scaled(path):
     return pygame.transform.scale(pygame.image.load(path).convert_alpha(), (core.TILE_SIZE, core.TILE_SIZE))
 
 def start_othello():
     core.init_core()
-    global screen, background_tile, BLUE_PAWN, BLUE_FR1, BLUE_FR2, BLUE_FR3, RED_PAWN, RED_FR1, RED_FR2, RED_FR3  
+    global screen, background_tile, BLUE_PAWN, BLUE_FR1, BLUE_FR2, BLUE_FR3, RED_PAWN, RED_FR1, RED_FR2, RED_FR3, pause
     screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE+50])
     pygame.display.set_caption("MA-24 : Othello game")
 
@@ -41,6 +42,9 @@ def start_othello():
     RED_FR1       = _load_scaled("Assets/pawns/red_pawn_fr1.png")
     RED_FR2       = _load_scaled("Assets/pawns/red_pawn_fr2.png")
     RED_FR3       = _load_scaled("Assets/pawns/red_pawn_fr3.png")
+    chrono.reset()
+    chrono.start()
+    pause = False
 
 start_othello()
 
@@ -49,6 +53,8 @@ pause_btn_image = pygame.image.load("Assets/buttons/pause_buttons.png").convert_
 pause_btn_image = pygame.transform.scale(pause_btn_image,(100,40))
 quit_btn_image = pygame.image.load("Assets/buttons/quit_buttons.png").convert_alpha()
 quit_btn_image = pygame.transform.scale(quit_btn_image,(100,40))
+unpause_btn_image = pygame.image.load("Assets/buttons/unpause_buttons.png").convert_alpha()
+unpause_btn_image = pygame.transform.scale(unpause_btn_image,(100,40))
 
 
 
@@ -86,6 +92,7 @@ def draw_text(text, pos, font=FONT_DEFAULT, color=BLACK, center=False):
     screen.blit(surf, rect)
 
 def draw_sidebar():
+    global quit_btn_pos, pause_btn_pos
     rect_x = 0
     rect_y = core.BOARD_HEIGHT*core.TILE_SIZE
     rect_w = core.BOARD_WIDTH*core.TILE_SIZE
@@ -94,17 +101,23 @@ def draw_sidebar():
     pygame.draw.rect(screen, ORANGE, (rect_x, rect_y, rect_w, rect_h), 0)
 
     #afficher les bouton
-    screen.blit(quit_btn_image,(rect_w - 105,rect_y + 5))
-    screen.blit(pause_btn_image,(rect_w - 210,rect_y + 5))
-    score_player1,score_player2 = core.calcul_score()
+    pause_btn_pos = rect_w - 210,rect_y + 5
+    quit_btn_pos = rect_w - 105,rect_y + 5
+    screen.blit(quit_btn_image,(quit_btn_pos))
+    if pause :
+        screen.blit(unpause_btn_image,(pause_btn_pos))
+    else:
+        screen.blit(pause_btn_image,(pause_btn_pos))
 
     #afficher le score
+    score_player1,score_player2 = core.calcul_score()
     draw_text(score_player1,(rect_x+10, txt_y),color = BLUE)
     draw_text(":",(rect_x+40, txt_y),color = BLACK)
     draw_text(score_player2,(rect_x+60, txt_y),color = RED)
 
     #afficher le temp
-    import chrono
+    time = chrono.format_temps(chrono.temps_ecoule())
+    draw_text(time,(rect_w/4,txt_y))
 
 def draw_grid_lines(screen, long,larg):
     # vertical lines
@@ -244,21 +257,30 @@ def repeat_bg() :
                 screen.blit(background_tile, (bx, by))
 
 def place_star(pos):
-    legal_moves = check_legal_moves(core.current_player)
+    if not pause :
+        legal_moves = check_legal_moves(core.current_player)
 
-    mouse_case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
+        mouse_case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
 
-    for move in legal_moves:
-        if move == mouse_case:
-            draw_hover_star(move)
-        else:
-            draw_star(move, core.current_player)
+        for move in legal_moves:
+            if move == mouse_case:
+                draw_hover_star(move)
+            else:
+                draw_star(move, core.current_player)
 
 def loadscreen():
     repeat_bg()# Répéter le bloc 8x8 (background_tile) pour couvrir dynamiquement la taille du plateau (code de copilot UNIQUEMENT pour répéter l'arrière plan)
     draw_grid_lines(screen,core.BOARD_HEIGHT,core.BOARD_WIDTH)# draw_grid()
     load_player()
     draw_sidebar()
+    if pause:
+        rect_h = core.TILE_SIZE * 2
+        rect_w = core.TILE_SIZE * core.BOARD_WIDTH
+        board_h = core.TILE_SIZE * core.BOARD_HEIGHT
+        rect_x = 0
+        rect_y = (board_h - rect_h) // 2  # centre vertical
+        pygame.draw.rect(screen, WHITE, (rect_x, rect_y, rect_w, rect_h), 0)
+        draw_text("The game is paused.", (rect_x + rect_w // 2, rect_y + rect_h // 2),font=TITLE_FONT, center=True)
 
 def draw_gameover(winner,score_1, score_2) :
     # hauteur = 2 cases, largeur = largeur du plateau, centré verticalement
@@ -287,9 +309,28 @@ def draw_gameover(winner,score_1, score_2) :
         TITLE_FONT = pygame.font.SysFont("Arial", 38)
         UNDER_TITLE_FONT = pygame.font.SysFont("Georgia", 18)
     draw_text(msg, (rect_x + rect_w // 2, rect_y + rect_h // 2),font=TITLE_FONT, color=color_winner, center=True)
-    draw_text("click to continue", (rect_x + rect_w // 2, rect_y + rect_h // 2 + core.TILE_SIZE // 3),font=UNDER_TITLE_FONT, color=BLACK, center=True)
-    pygame.display.flip()
+    
+    chrono.pause()
+    time = chrono.format_temps(chrono.temps_ecoule())
+    draw_text(time, (rect_x + rect_w // 2, rect_y + rect_h // 2 + core.TILE_SIZE // 3),font=TITLE_FONT, color=BLACK, center=True)
 
+    draw_text("click to continue", (rect_x + rect_w // 2, rect_y + rect_h // 2 + core.TILE_SIZE // 1.5),font=UNDER_TITLE_FONT, color=BLACK, center=True)
+    pygame.display.flip()
+def btn_ispressed(btn_pos):
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    btn_x,btn_y = btn_pos
+    btn_widht = 100
+    btn_height = 40
+    if (btn_x <= mouse_x <= btn_x + btn_widht and btn_y <= mouse_y <= btn_y + btn_height):
+        return True
+
+def pause_game():
+    global pause
+    pause = not pause
+    if pause:
+        chrono.pause()
+    else:
+        chrono.start()
 
 def run_othello():
     start_othello()
@@ -302,8 +343,16 @@ def run_othello():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun == True:
-                case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
-                core.play(case)
+                if pause == False :
+                    case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
+                    core.play(case)
+                if btn_ispressed(quit_btn_pos):
+                    chrono.pause()
+                    running=core.leave_game()
+                    chrono.start()
+                if btn_ispressed(pause_btn_pos):
+                    pause_game()
+                
             if event.type == pygame.MOUSEBUTTONDOWN and not core.gamerun:
                 running = False
         

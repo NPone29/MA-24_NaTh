@@ -134,6 +134,14 @@ def gameover() :
                 score_player1 +=1
             if grid[x][y] == 1:
                 score_player2 +=1
+    return score_player1,score_player2
+
+def gameover() :
+    import gfx
+    global gamerun
+    gamerun = False
+    score_player1,score_player2 = calcul_score()
+
 
     if score_player2 > score_player1 :
         winnerplayer = "Player_2"
@@ -148,9 +156,11 @@ def gameover() :
     gfx.draw_gameover(winnerplayer,score_player1,score_player2)
 
 def leave_game():
+    
     if messagebox.askyesno("Leave Game", "Do you want to leave the game?"):
-        import gfx
-        gfx.running = False
+        return False
+    else:
+        return True
 
 class Chronometre:
     def __init__(self):
@@ -175,7 +185,6 @@ class Chronometre:
         self.start_time = None
         self.elapsed = 0.0
         self.running = False
-        print("Chronomètre remis à zéro.")
 
     def temps_ecoule(self):
         #Retourne le temps écoulé en secondes.

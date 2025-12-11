@@ -116,15 +116,7 @@ def skip_player():
             skipped = True
     else :
         skipped = False
-
-def gameover() :
-    import gfx
-    global gamerun
-    if gamerun :
-        sound.stop_game_music()
-        sound.play_winner()
-    gamerun = False
-
+def calcul_score():
     score_player1 = 0
     score_player2 = 0
 
@@ -136,9 +128,14 @@ def gameover() :
                 score_player2 +=1
     return score_player1,score_player2
 
+
+
 def gameover() :
     import gfx
     global gamerun
+    if gamerun :
+        sound.stop_game_music()
+        sound.play_winner()
     gamerun = False
     score_player1,score_player2 = calcul_score()
 

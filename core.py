@@ -114,11 +114,7 @@ def skip_player():
     else :
         skipped = False
 
-def gameover() :
-    import gfx
-    global gamerun
-    gamerun = False
-
+def calcul_score():
     score_player1 = 0
     score_player2 = 0
 
@@ -128,6 +124,15 @@ def gameover() :
                 score_player1 +=1
             if grid[x][y] == 1:
                 score_player2 +=1
+    return score_player1,score_player2
+
+def gameover() :
+    import gfx
+    global gamerun
+    gamerun = False
+
+    score_player1,score_player2 = calcul_score()
+
 
     if score_player2 > score_player1 :
         winnerplayer = "Player_2"

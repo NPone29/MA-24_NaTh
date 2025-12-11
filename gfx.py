@@ -9,18 +9,22 @@ FONT_DEFAULT = pygame.font.SysFont("Arial", 28)
 TITLE_FONT = pygame.font.SysFont("Georgia", 38)
 UNDER_TITLE_FONT = pygame.font.SysFont("Georgia", 18)
 
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-BLUE = (0, 0, 128)
-RED = (200, 0, 0)
-GREEN =(20, 163, 58)
-GRAY =(40, 40, 40)
+BLACK   = (0, 0, 0)
+WHITE   = (255, 255, 255)
+BLUE    = (3, 140, 252)
+RED     = (255, 0, 0)
+GREEN   = (20, 163, 58)
+GRAY    = (40, 40, 40)
+ORANGE  = (255, 145, 0)
 
+
+def _load_scaled(path):
+    return pygame.transform.scale(pygame.image.load(path).convert_alpha(), (core.TILE_SIZE, core.TILE_SIZE))
 
 def start_othello():
     core.init_core()
-    global screen, background_tile
-    screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE])
+    global screen, background_tile, BLUE_PAWN, BLUE_FR1, BLUE_FR2, BLUE_FR3, RED_PAWN, RED_FR1, RED_FR2, RED_FR3  
+    screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE+50])
     pygame.display.set_caption("MA-24 : Othello game")
 
     load_background = core.BACKGROUND_IMAGE_PATH
@@ -29,20 +33,25 @@ def start_othello():
 
     gameIcon = pygame.image.load("Assets/icon.png")
     pygame.display.set_icon(gameIcon)
+    BLUE_PAWN     = _load_scaled("Assets/pawns/blue_pawn.png")
+    BLUE_FR1      = _load_scaled("Assets/pawns/blue_pawn_fr1.png")
+    BLUE_FR2      = _load_scaled("Assets/pawns/blue_pawn_fr2.png")
+    BLUE_FR3      = _load_scaled("Assets/pawns/blue_pawn_fr3.png")
+    RED_PAWN      = _load_scaled("Assets/pawns/red_pawn.png")
+    RED_FR1       = _load_scaled("Assets/pawns/red_pawn_fr1.png")
+    RED_FR2       = _load_scaled("Assets/pawns/red_pawn_fr2.png")
+    RED_FR3       = _load_scaled("Assets/pawns/red_pawn_fr3.png")
 
 start_othello()
-# préchargement et mise à l'échelle (une seule fois)
-def _load_scaled(path):
-    return pygame.transform.scale(pygame.image.load(path).convert_alpha(), (core.TILE_SIZE, core.TILE_SIZE))
 
-BLUE_PAWN     = _load_scaled("Assets/pawns/blue_pawn.png")
-BLUE_FR1      = _load_scaled("Assets/pawns/blue_pawn_fr1.png")
-BLUE_FR2      = _load_scaled("Assets/pawns/blue_pawn_fr2.png")
-BLUE_FR3      = _load_scaled("Assets/pawns/blue_pawn_fr3.png")
-RED_PAWN      = _load_scaled("Assets/pawns/red_pawn.png")
-RED_FR1       = _load_scaled("Assets/pawns/red_pawn_fr1.png")
-RED_FR2       = _load_scaled("Assets/pawns/red_pawn_fr2.png")
-RED_FR3       = _load_scaled("Assets/pawns/red_pawn_fr3.png")
+
+pause_btn_image = pygame.image.load("Assets/buttons/pause_buttons.png").convert_alpha()
+pause_btn_image = pygame.transform.scale(pause_btn_image,(100,40))
+quit_btn_image = pygame.image.load("Assets/buttons/quit_buttons.png").convert_alpha()
+quit_btn_image = pygame.transform.scale(quit_btn_image,(100,40))
+
+
+
 
 ANIM_INTERVAL_MS = 100
 _anim_timestamps = {}  # clé = (x,y) -> dernier tick d'avancement
@@ -68,6 +77,34 @@ def draw_line(screen, start, end):
         (end[0] * core.TILE_SIZE, end[1] * core.TILE_SIZE),
         line_larger
     )
+def draw_text(text, pos, font=FONT_DEFAULT, color=BLACK, center=False):
+    surf = font.render(str(text), True, color)
+    if center:
+        rect = surf.get_rect(center=pos)
+    else:
+        rect = surf.get_rect(topleft=pos)
+    screen.blit(surf, rect)
+
+def draw_sidebar():
+    rect_x = 0
+    rect_y = core.BOARD_HEIGHT*core.TILE_SIZE
+    rect_w = core.BOARD_WIDTH*core.TILE_SIZE
+    rect_h = 60
+    txt_y = rect_y + 9
+    pygame.draw.rect(screen, ORANGE, (rect_x, rect_y, rect_w, rect_h), 0)
+
+    #afficher les bouton
+    screen.blit(quit_btn_image,(rect_w - 105,rect_y + 5))
+    screen.blit(pause_btn_image,(rect_w - 210,rect_y + 5))
+    score_player1,score_player2 = core.calcul_score()
+
+    #afficher le score
+    draw_text(score_player1,(rect_x+10, txt_y),color = BLUE)
+    draw_text(":",(rect_x+40, txt_y),color = BLACK)
+    draw_text(score_player2,(rect_x+60, txt_y),color = RED)
+
+    #afficher le temp
+    import chrono
 
 def draw_grid_lines(screen, long,larg):
     # vertical lines
@@ -218,20 +255,10 @@ def place_star(pos):
             draw_star(move, core.current_player)
 
 def loadscreen():
-
     repeat_bg()# Répéter le bloc 8x8 (background_tile) pour couvrir dynamiquement la taille du plateau (code de copilot UNIQUEMENT pour répéter l'arrière plan)
     draw_grid_lines(screen,core.BOARD_HEIGHT,core.BOARD_WIDTH)# draw_grid()
-
     load_player()
-
-def draw_text(text, pos, font=FONT_DEFAULT, color=BLACK, center=False):
-    """Dessine du texte sur l'écran. pos = (x,y). Si center=True, pos est le centre."""
-    surf = font.render(str(text), True, color)
-    if center:
-        rect = surf.get_rect(center=pos)
-    else:
-        rect = surf.get_rect(topleft=pos)
-    screen.blit(surf, rect)
+    draw_sidebar()
 
 def draw_gameover(winner,score_1, score_2) :
     # hauteur = 2 cases, largeur = largeur du plateau, centré verticalement
@@ -252,7 +279,13 @@ def draw_gameover(winner,score_1, score_2) :
         msg = f"Fin de la partie, égalité ! — {score_2} to {score_1}"
         color_winner = BLACK
     
-        
+    
+    if core.TILE_SIZE * core.BOARD_HEIGHT < 800:
+        TITLE_FONT = pygame.font.SysFont("Arial", 22)
+        UNDER_TITLE_FONT = pygame.font.SysFont("Georgia", 12)
+    else:
+        TITLE_FONT = pygame.font.SysFont("Arial", 38)
+        UNDER_TITLE_FONT = pygame.font.SysFont("Georgia", 18)
     draw_text(msg, (rect_x + rect_w // 2, rect_y + rect_h // 2),font=TITLE_FONT, color=color_winner, center=True)
     draw_text("click to continue", (rect_x + rect_w // 2, rect_y + rect_h // 2 + core.TILE_SIZE // 3),font=UNDER_TITLE_FONT, color=BLACK, center=True)
     pygame.display.flip()
@@ -273,7 +306,7 @@ def run_othello():
                 core.play(case)
             if event.type == pygame.MOUSEBUTTONDOWN and not core.gamerun:
                 running = False
-            
+        
         core.skip_player()
         if core.gamerun:
             loadscreen()

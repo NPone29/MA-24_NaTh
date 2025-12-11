@@ -9,7 +9,7 @@ sound.init_sound()
 
 def afficher_credit():
     if messagebox.askyesno("Credits", "Developed by NPone29 and EscorpionTheo.\nWould you like to buy us a coffee ?") :
-        webbrowser.open("https://buymeacoffee.com/")
+        webbrowser.open("https://buymeacoffee.com/npone29")
 
 def open_setting(root):
     import start_menu.setting as setting

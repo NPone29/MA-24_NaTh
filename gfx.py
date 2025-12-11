@@ -64,10 +64,16 @@ _anim_timestamps = {}  # clé = (x,y) -> dernier tick d'avancement
 
 
 def pos_to_case(pos,long,larg):
-    return (
-        int(pos[0] / core.TILE_SIZE) % larg,
-        int(pos[1] / core.TILE_SIZE) % long,
-    )
+    x =int(pos[0] / core.TILE_SIZE)
+    y=int(pos[1] / core.TILE_SIZE)
+
+    if x >= larg or y >= long:
+        return None
+    else:
+        return (
+            x% larg,
+            y% long,
+        )
 
 def draw_line(screen, start, end):
 
@@ -261,7 +267,7 @@ def place_star(pos):
         legal_moves = check_legal_moves(core.current_player)
 
         mouse_case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
-
+        
         for move in legal_moves:
             if move == mouse_case:
                 draw_hover_star(move)
@@ -341,11 +347,12 @@ def run_othello():
         screen.fill(GREEN)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                running = core.leave_game()
             if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun == True:
                 if pause == False :
                     case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
-                    core.play(case)
+                    if case != None :
+                        core.play(case)
                 if btn_ispressed(quit_btn_pos):
                     chrono.pause()
                     running=core.leave_game()

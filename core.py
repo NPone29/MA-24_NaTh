@@ -1,5 +1,8 @@
 import json
 import sound
+from tkinter import *
+from tkinter import messagebox
+import time
 
 json_file_path = "settings.json"
 
@@ -146,3 +149,46 @@ def gameover() :
 
     gfx.draw_gameover(winnerplayer,score_player1,score_player2)
 
+def leave_game():
+    if messagebox.askyesno("Leave Game", "Do you want to leave the game?"):
+        import gfx
+        gfx.running = False
+
+class Chronometre:
+    def __init__(self):
+        self.start_time = None   # Heure de départ
+        self.elapsed = 0.0       # Temps écoulé cumulé
+        self.running = False     # État du chronomètre
+
+    def start(self):
+        #Démarre ou reprend le chronomètre.
+        if not self.running:
+            self.start_time = time.perf_counter()
+            self.running = True
+
+    def pause(self):
+        #Met en pause le chronomètre.
+        if self.running:
+            self.elapsed += time.perf_counter() - self.start_time
+            self.running = False
+
+    def reset(self):
+        #Réinitialise le chronomètre.
+        self.start_time = None
+        self.elapsed = 0.0
+        self.running = False
+        print("Chronomètre remis à zéro.")
+
+    def temps_ecoule(self):
+        #Retourne le temps écoulé en secondes.
+        if self.running:
+            return self.elapsed + (time.perf_counter() - self.start_time)
+        return self.elapsed
+
+    @staticmethod
+    def format_temps(secondes):
+        #Formate le temps en HH:MM:SS
+        heures = int(secondes // 3600)
+        minutes = int((secondes % 3600) // 60)
+        secs = int(secondes % 60)
+        return f"{heures:02}:{minutes:02}:{secs:02}"

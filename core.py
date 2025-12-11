@@ -120,6 +120,9 @@ def skip_player():
 def gameover() :
     import gfx
     global gamerun
+    if gamerun :
+        sound.stop_game_music()
+        sound.play_winner()
     gamerun = False
 
     score_player1 = 0

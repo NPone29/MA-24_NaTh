@@ -35,8 +35,10 @@ def afficher_menu():
     root = Tk()
     root.title("Othello Menu")
     root.geometry("450x500")
-
-    original_image = Image.open("Assets/backgrounds/menu_background.png")
+    import core
+    core.init_core()
+    folder= core.folder
+    original_image = Image.open(f"Assets/{folder}/backgrounds/menu_background.png")
     bg_resized = original_image.resize((450, 500), Image.LANCZOS)
     bg = ImageTk.PhotoImage(bg_resized)
 

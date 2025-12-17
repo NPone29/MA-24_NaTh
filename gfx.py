@@ -5,9 +5,7 @@ import sound
 pygame.init()
 pygame.font.init()
 
-FONT_DEFAULT = pygame.font.SysFont("Arial", 28)
-TITLE_FONT = pygame.font.SysFont("Georgia", 38)
-UNDER_TITLE_FONT = pygame.font.SysFont("Georgia", 18)
+
 
 BLACK   = (0, 0, 0)
 WHITE   = (255, 255, 255)
@@ -24,24 +22,31 @@ def _load_scaled(path):
 
 def start_othello():
     core.init_core()
-    global screen, background_tile, BLUE_PAWN, BLUE_FR1, BLUE_FR2, BLUE_FR3, RED_PAWN, RED_FR1, RED_FR2, RED_FR3, pause
+    global screen, background_tile, BLUE_PAWN, BLUE_FR1, BLUE_FR2, BLUE_FR3, RED_PAWN, RED_FR1, RED_FR2, RED_FR3, pause, FONT_DEFAULT, TITLE_FONT, UNDER_TITLE_FONT,folder
     screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE+50])
     pygame.display.set_caption("MA-24 : Othello game")
 
     load_background = core.BACKGROUND_IMAGE_PATH
     background_image = pygame.image.load(load_background).convert()
     background_tile = pygame.transform.scale(background_image, (core.TILE_SIZE * 8, core.TILE_SIZE * 8))
-
-    gameIcon = pygame.image.load("Assets/icon.png")
+    folder = core.folder
+    font = core.font
+    gameIcon = pygame.image.load(f"Assets/{folder}/icon.png")
     pygame.display.set_icon(gameIcon)
-    BLUE_PAWN     = _load_scaled("Assets/pawns/blue_pawn.png")
-    BLUE_FR1      = _load_scaled("Assets/pawns/blue_pawn_fr1.png")
-    BLUE_FR2      = _load_scaled("Assets/pawns/blue_pawn_fr2.png")
-    BLUE_FR3      = _load_scaled("Assets/pawns/blue_pawn_fr3.png")
-    RED_PAWN      = _load_scaled("Assets/pawns/red_pawn.png")
-    RED_FR1       = _load_scaled("Assets/pawns/red_pawn_fr1.png")
-    RED_FR2       = _load_scaled("Assets/pawns/red_pawn_fr2.png")
-    RED_FR3       = _load_scaled("Assets/pawns/red_pawn_fr3.png")
+    BLUE_PAWN     = _load_scaled(f"Assets/{folder}/pawns/blue_pawn.png")
+    BLUE_FR1      = _load_scaled(f"Assets/{folder}/pawns/blue_pawn_fr1.png")
+    BLUE_FR2      = _load_scaled(f"Assets/{folder}/pawns/blue_pawn_fr2.png")
+    BLUE_FR3      = _load_scaled(f"Assets/{folder}/pawns/blue_pawn_fr3.png")
+    RED_PAWN      = _load_scaled(f"Assets/{folder}/pawns/red_pawn.png")
+    RED_FR1       = _load_scaled(f"Assets/{folder}/pawns/red_pawn_fr1.png")
+    RED_FR2       = _load_scaled(f"Assets/{folder}/pawns/red_pawn_fr2.png")
+    RED_FR3       = _load_scaled(f"Assets/{folder}/pawns/red_pawn_fr3.png")
+
+    
+
+    FONT_DEFAULT = pygame.font.SysFont(f"{font}", 28)
+    TITLE_FONT = pygame.font.SysFont(f"{font}", 38)
+    UNDER_TITLE_FONT = pygame.font.SysFont(f"{font}", 18)
     chrono.reset()
     chrono.start()
     pause = False
@@ -49,11 +54,11 @@ def start_othello():
 start_othello()
 
 
-pause_btn_image = pygame.image.load("Assets/buttons/pause_buttons.png").convert_alpha()
+pause_btn_image = pygame.image.load(f"Assets/{folder}/buttons/pause_buttons.png").convert_alpha()
 pause_btn_image = pygame.transform.scale(pause_btn_image,(100,40))
-quit_btn_image = pygame.image.load("Assets/buttons/quit_buttons.png").convert_alpha()
+quit_btn_image = pygame.image.load(f"Assets/{folder}/buttons/quit_buttons.png").convert_alpha()
 quit_btn_image = pygame.transform.scale(quit_btn_image,(100,40))
-unpause_btn_image = pygame.image.load("Assets/buttons/unpause_buttons.png").convert_alpha()
+unpause_btn_image = pygame.image.load(f"Assets/{folder}/buttons/unpause_buttons.png").convert_alpha()
 unpause_btn_image = pygame.transform.scale(unpause_btn_image,(100,40))
 
 
@@ -209,15 +214,15 @@ def draw_player(coordinates, player):
 def draw_star(coordinates, player):
     x, y = coordinates
     if player == 0:
-        star = pygame.image.load("Assets/stars/blue_star.png")
+        star = pygame.image.load(f"Assets/{folder}/stars/blue_star.png")
     else:
-        star = pygame.image.load("Assets/stars/red_star.png")
+        star = pygame.image.load(f"Assets/{folder}/stars/red_star.png")
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 
 def draw_hover_star(coordinates):
     x, y = coordinates
-    star = pygame.image.load("Assets/stars/star.png")  # image jaune
+    star = pygame.image.load(f"Assets/{folder}/stars/star.png")  # image jaune
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 

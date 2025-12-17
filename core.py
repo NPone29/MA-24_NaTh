@@ -3,6 +3,7 @@ import sound
 from tkinter import *
 from tkinter import messagebox
 import time
+import random
 
 json_file_path = "settings.json"
 
@@ -76,11 +77,19 @@ def rules(grid, player, coordinates, dx, dy):
 def play(coordinates):
     global grid, current_player
 
+    import gfx
+    if gfx.bot and current_player == Player_2 and gfx.level == "easy":
+        coordinates = choose_move_random(current_player)
+
+    elif gfx.bot and current_player == Player_2 and gfx.level == "hard":
+        coordinates = choose_move_greedy(current_player)
+    
     x, y = coordinates # Idée de copilot pour décomposer les coordonnées
     
     if grid[y][x] is not None:
         print("Invalid move, cell already occupied.")
         return
+
     all_captured = []
     for dx in [-1, 0, 1]: # Idée de copilot pour faire cette boucle imbriquée. Parce que j'avais des problèmes alors j'ai lui ai demandé pour débuger. "Y a t'il des problèmes dans ma fonction play ?"
         for dy in [-1, 0, 1]:
@@ -102,12 +111,30 @@ def play(coordinates):
 
     current_player = get_next_player(current_player)
 
+def check_legal_moves(player):
+    legal_moves = []
+    for x in range(BOARD_WIDTH):
+        for y in range(BOARD_HEIGHT):
+            if grid[y][x] is None:
+                for dx in [-1, 0, 1]:
+                    for dy in [-1, 0, 1]:
+                        if dx == 0 and dy == 0:
+                            continue
+                        captured = rules(grid, player, (x, y), dx, dy)
+                        if captured:
+                            legal_moves.append((x, y))
+                            # dès qu'une direction capture, c'est un coup légal -> passer à la case suivante
+                            dx = dy = None
+                            break
+                    if dx is None:
+                        break
+    return legal_moves
+
 
 def skip_player():
-    import gfx
     global skipped, current_player
 
-    legal_moves = gfx.check_legal_moves(current_player)
+    legal_moves = check_legal_moves(current_player)
 
     if not legal_moves :
         if skipped == True :
@@ -161,7 +188,7 @@ def leave_game():
     else:
         return True
 
-class Chronometre:
+class Chronometre: #Le web m'a aidé pour cette classe.
     def __init__(self):
         self.start_time = None   # Heure de départ
         self.elapsed = 0.0       # Temps écoulé cumulé
@@ -198,3 +225,24 @@ class Chronometre:
         minutes = int((secondes % 3600) // 60)
         secs = int(secondes % 60)
         return f"{heures:02}:{minutes:02}:{secs:02}"
+
+def choose_move_random(player):
+    moves = check_legal_moves(player)
+    return random.choice(moves) if moves else None
+
+def choose_move_greedy(player): # J'ai demandé de l'aide à copilot pour cette fonction. Parce que je ne savais pas comment faire. "Peux tu m'aider à faire une fonction qui choisit le meilleur coup possible en fonction du nombre de pions capturés ?"
+    best = None
+    best_count = -1
+    for move in check_legal_moves(player):
+        total = 0
+        x, y = move
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                if dx == 0 and dy == 0:
+                    continue
+                caps = rules(grid, player, (x, y), dx, dy)
+                total += len(caps)
+        if total > best_count:
+            best_count = total
+            best = move
+    return best

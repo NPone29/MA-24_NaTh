@@ -2,6 +2,7 @@ import pygame
 import core
 import json
 import sound
+import time
 pygame.init()
 pygame.font.init()
 
@@ -48,6 +49,10 @@ def start_othello():
 
 start_othello()
 
+bot = None
+level = None
+bot_move_time = None
+BOT_MOVE_DELAY_MS = 750
 
 pause_btn_image = pygame.image.load("Assets/buttons/pause_buttons.png").convert_alpha()
 pause_btn_image = pygame.transform.scale(pause_btn_image,(100,40))
@@ -235,24 +240,6 @@ def load_player():
             if val is not None:
                 draw_player((x, y), val)
 
-def check_legal_moves(player):
-    legal_moves = []
-    for x in range(core.BOARD_WIDTH):
-        for y in range(core.BOARD_HEIGHT):
-            if core.grid[y][x] is None:
-                for dx in [-1, 0, 1]:
-                    for dy in [-1, 0, 1]:
-                        if dx == 0 and dy == 0:
-                            continue
-                        captured = core.rules(core.grid, player, (x, y), dx, dy)
-                        if captured:
-                            legal_moves.append((x, y))
-                            # dès qu'une direction capture, c'est un coup légal -> passer à la case suivante
-                            dx = dy = None
-                            break
-                    if dx is None:
-                        break
-    return legal_moves
 def repeat_bg() :
         board_px_w = core.BOARD_WIDTH * core.TILE_SIZE
         board_px_h = core.BOARD_HEIGHT * core.TILE_SIZE
@@ -264,7 +251,7 @@ def repeat_bg() :
 
 def place_star(pos):
     if not pause :
-        legal_moves = check_legal_moves(core.current_player)
+        legal_moves = core.check_legal_moves(core.current_player)
 
         mouse_case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
         
@@ -338,7 +325,11 @@ def pause_game():
     else:
         chrono.start()
 
-def run_othello():
+def run_othello(bot_status, level_bot=None):
+    global bot, level, bot_move_time
+    if bot_status:
+        bot = True
+        level = level_bot
     start_othello()
     sound.play_game_music(True)
     running = True
@@ -350,7 +341,9 @@ def run_othello():
             if event.type == pygame.QUIT:
                 running = core.leave_game()
             if event.type == pygame.MOUSEBUTTONDOWN and core.gamerun == True:
-                if pause == False :
+                if pause == False:
+                    if bot and core.current_player == core.Player_2:
+                        continue
                     case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
                     if case != None :
                         core.play(case)
@@ -363,12 +356,24 @@ def run_othello():
                 
             if event.type == pygame.MOUSEBUTTONDOWN and not core.gamerun:
                 running = False
-        
         core.skip_player()
         if core.gamerun:
             loadscreen()
             place_star(pos)
             pygame.display.flip()
+
+        # Aide demander à Copilot pour implémenter un délai avant que le bot joue. Peux-tu m'aider à faire en sorte que le bot attende un certain délai avant de jouer son coup ?
+        if core.current_player == core.Player_2 and bot and not pause and core.gamerun:
+            now = pygame.time.get_ticks()
+            if bot_move_time is None:
+                bot_move_time = now + BOT_MOVE_DELAY_MS
+            elif now >= bot_move_time:
+                bot_move_time = None
+                core.play(None)
+        else:
+            
+            bot_move_time = None
+
         clock.tick(60)
     pygame.display.quit()
     sound.stop_winner_music()

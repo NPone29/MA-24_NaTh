@@ -20,7 +20,7 @@ def open_othello(root):
     sound.stop_menu()
     root.destroy()
     import gfx
-    gfx.run_othello()
+    gfx.run_othello(False)
     sound.init_sound()
 
 

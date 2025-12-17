@@ -31,12 +31,12 @@ def init_core():
     global grid, skipped, gamerun, current_player,BACKGROUND_IMAGE_PATH,BOARD_WIDTH,BOARD_HEIGHT,TILE_SIZE,font,folder
     with open(json_file_path, 'r') as json_file:
         config = json.load(json_file)
-    BACKGROUND_IMAGE_PATH = config.get("BACKGROUND_IMAGE_PATH")
+    font = "Arial"
+    folder= "default"
+    BACKGROUND_IMAGE_PATH = f"Assets/{folder}/backgrounds/sky_background.png"#config.get("BACKGROUND_IMAGE_PATH")
     BOARD_WIDTH = config.get("BOARD_WIDTH")
     BOARD_HEIGHT = config.get("BOARD_HEIGHT")
     TILE_SIZE = config.get("TILE_SIZE")
-    font = "Arial"
-    folder= "default"
     grid = create_grid(BOARD_HEIGHT,BOARD_WIDTH)
     skipped =False
     gamerun = True

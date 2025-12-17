@@ -3,35 +3,26 @@ from tkinter import messagebox
 import json
 
 def run_settings(parent=None):
-    
-    if parent is None:
-        win = Tk()
-        own_mainloop = True #Code générer par copilot pour pouvoir éviter que le script s'arrète : comment faire pour que le menu ne s'arrète pas si j'aimerai aller 2 fois dans les settings ?
-    else:
-        win = Toplevel(parent)
-        own_mainloop = False
-
-    win.title("Othello Setting")
-    win.geometry("300x450")
-
-    case_label = Label(win, text="The size of the board (number of squares per side):")
+    global settings_frame
+    settings_frame = Frame(parent)
+    case_label = Label(settings_frame, text="The size of the board (number of squares per side):")
     case_label.pack()
 
     # Label pour afficher la valeur sélectionnée
-    case_value_label = Label(win, text="Value selected: 0")
+    case_value_label = Label(settings_frame, text="Value selected: 0")
     case_value_label.pack()
 
     def afficher_valeur_case(valeur):
         case_value_label.config(text=f"Value selected: {int(float(valeur))}")
 
-    case_scale = Scale(win, from_=4, to=20, orient="horizontal", length=300, command=afficher_valeur_case)
+    case_scale = Scale(settings_frame, from_=4, to=20, orient="horizontal", length=300, command=afficher_valeur_case)
 
     current_value_size = json.load(open("settings.json")).get("BOARD_WIDTH",8)
     case_scale.set(current_value_size)
     afficher_valeur_case(case_scale.get())
     case_scale.pack(pady=20)
 
-    background_label = Label(win, text="Choose your background:")
+    background_label = Label(settings_frame, text="Choose your background:")
     background_label.pack()
 
     current_background = json.load(open("settings.json")).get("BACKGROUND_IMAGE_PATH", "Assets/background.png")
@@ -46,26 +37,26 @@ def run_settings(parent=None):
 
     choix = StringVar(value=choix_value)
 
-    radio1 = Radiobutton(win, text="Default", variable=choix, value="default")
-    radio2 = Radiobutton(win, text="Flowerly", variable=choix, value="flowerly")
-    radio3 = Radiobutton(win, text="Sky", variable=choix, value="sky")
-    radio4 = Radiobutton(win, text="Space", variable=choix, value="space")
+    radio1 = Radiobutton(settings_frame, text="Default", variable=choix, value="default")
+    radio2 = Radiobutton(settings_frame, text="Flowerly", variable=choix, value="flowerly")
+    radio3 = Radiobutton(settings_frame, text="Sky", variable=choix, value="sky")
+    radio4 = Radiobutton(settings_frame, text="Space", variable=choix, value="space")
 
     radio1.pack()
     radio2.pack()
     radio3.pack()
     radio4.pack()
 
-    sound_label = Label(win, text="Adjust the sound level:")
+    sound_label = Label(settings_frame, text="Adjust the sound level:")
     sound_label.pack()
 
-    sound_value_label = Label(win, text="Sound: 0")
+    sound_value_label = Label(settings_frame, text="Sound: 0")
     sound_value_label.pack()
 
     def afficher_valeur_sound(valeur):
         sound_value_label.config(text=f"Sound: {int(float(valeur))} %")
 
-    volume_scale = Scale(win, from_=0, to=100, orient="horizontal", length=300, command=afficher_valeur_sound)
+    volume_scale = Scale(settings_frame, from_=0, to=100, orient="horizontal", length=300, command=afficher_valeur_sound)
 
     current_volume = json.load(open("settings.json")).get("volume", 0)
     current_volume = int(current_volume * 100)
@@ -77,12 +68,12 @@ def run_settings(parent=None):
 
     music_var = IntVar(value=current_music)
 
-    music_checkbutton = Checkbutton(win, text="Music", variable=music_var)
+    music_checkbutton = Checkbutton(settings_frame, text="Music", variable=music_var)
     music_checkbutton.place(x=80, y=350)
 
     current_sound = json.load(open("settings.json")).get("sound", 1)
     sound_var = IntVar(value=current_sound)
-    sound_checkbutton = Checkbutton(win, text="Sound", variable=sound_var)
+    sound_checkbutton = Checkbutton(settings_frame, text="Sound", variable=sound_var)
     sound_checkbutton.place(x=165, y=350)
 
     def valider():
@@ -91,6 +82,8 @@ def run_settings(parent=None):
         volume_option = int(volume_scale.get())
         music_option = music_var.get()
         sound_option = sound_var.get()
+        
+        from start_menu import menu
         status = messagebox.askyesnocancel("Settings", f"Here are the current settings\n\nBoard Size: {board_size}\nSelected background: {selected_background}\nVolume option: {volume_option}%\nMusic: {'On' if music_option == 1 else 'Off'}\nSound: {'On' if sound_option == 1 else 'Off'}\n\nDo you want to save these settings?")
         if status is True:
             import json
@@ -110,13 +103,15 @@ def run_settings(parent=None):
             sd.stop_menu()
             sd.init_sound()
             sd.play_menu(True)
-            win.destroy()
+            menu.page("main")
+            settings_frame.destroy()
         elif status is False:
-            win.destroy()
+            menu.page("main")
+            settings_frame.destroy()
         elif status is None:
             pass
     
-    btn_frame = Frame(win, height=20)
+    btn_frame = Frame(settings_frame, height=20)
     btn_frame.pack(fill=X, side=BOTTOM, pady=10)
     validate_button = Button(btn_frame, text="Validate", command=valider, bg="green2", activebackground="green3")
     validate_button.pack(side=RIGHT, padx=10, pady=0, ipadx=10, ipady=5)
@@ -132,6 +127,5 @@ def run_settings(parent=None):
 
     reset_button = Button(btn_frame, text="Reset", command=lambda: reset_to_default(), bg="tomato", activebackground="red3")
     reset_button.pack(side=LEFT, padx=10, pady=0, ipadx=10, ipady=5)
+    return settings_frame
 
-    if own_mainloop:
-        win.mainloop()

@@ -15,12 +15,12 @@ def open_setting(root):
     import start_menu.setting as setting
     setting.run_settings(root)
 
-def open_othello(root):
+def open_othello(root,player_vs_ai=False,level="easy"):
     sound.play_start()
     sound.stop_menu()
     root.destroy()
     import gfx
-    gfx.run_othello(False)
+    gfx.run_othello(player_vs_ai,level)
     sound.init_sound()
 
 
@@ -30,7 +30,29 @@ def leave():
         import sys
         sys.exit()
 
+def page(page_name):
+    global main_frame,chose_play_frame,chose_level_frame,root
+    from start_menu import setting
+    
+    main_frame.pack_forget()
+    chose_play_frame.pack_forget()
+    chose_level_frame.pack_forget()
+
+    if page_name=="main":
+        main_frame.pack(fill=BOTH, expand=True)
+        print("main page")
+    elif page_name=="chose_play":
+        chose_play_frame.pack(fill=BOTH, expand=True)
+        print("chose play page")
+    elif page_name=="chose_level":
+        chose_level_frame.pack(fill=BOTH, expand=True)
+        print("chose level page")
+    elif page_name=="settings":
+        setting.run_settings(root).pack(fill=BOTH, expand=True)
+        print("settings page")
+
 def afficher_menu():
+    global main_frame,chose_play_frame,chose_level_frame,root
     sound.play_menu(loop=True)
     root = Tk()
     root.title("Othello Menu")
@@ -42,22 +64,53 @@ def afficher_menu():
     bg_resized = original_image.resize((450, 500), Image.LANCZOS)
     bg = ImageTk.PhotoImage(bg_resized)
 
-    canvas = Canvas(root, width=350, height=400, highlightthickness=0)
+    main_frame = Frame(root, bg="", bd=0)
+    main_frame.pack(fill=BOTH, expand=True)
+
+    canvas = Canvas(main_frame, width=350, height=400, highlightthickness=0)
     canvas.pack(fill="both", expand=True)
 
     canvas.create_image(0, 0, image=bg, anchor="nw")
-    root._bg_image = bg
+    main_frame._bg_image = bg
 
-    play_button = Button(root, text="Play", width=15, height=2, command=lambda: open_othello(root), bg="green2", activebackground="green3")
+
+    play_button = Button(main_frame, text="Play", width=15, height=2, command=lambda: page("chose_play"), bg="green2", activebackground="green3")
     play_button.place(relx=0.5, rely=0.4, anchor="n")
 
-    credit_button = Button(root, text="Credit", width=15, height=2, command=afficher_credit, bg="deep sky blue", activebackground="dodger blue")
+    credit_button = Button(main_frame, text="Credit", width=15, height=2, command=afficher_credit, bg="deep sky blue", activebackground="dodger blue")
     credit_button.place(relx=0.5, rely=0.5, anchor="n")
 
-    setting_button = Button(root, text="Setting", width=15, height=2, command=lambda: open_setting(root), bg="orange2", activebackground="orange3")
+    setting_button = Button(main_frame, text="Setting", width=15, height=2, command=lambda: page("settings"), bg="orange2", activebackground="orange3")
     setting_button.place(relx=0.5, rely=0.6, anchor="n")
 
-    leave_button = Button(root, text="Leave", width=15, height=2, command=leave,bg="red2", activebackground="red3")
+    leave_button = Button(main_frame, text="Leave", width=15, height=2, command=leave,bg="red2", activebackground="red3")
     leave_button.place(relx=0.5, rely=0.7, anchor="n")
+
+
+    chose_play_frame = Frame(root, bg="", bd=0)
+    canvas2 = Canvas(chose_play_frame, width=350, height=400, highlightthickness=0)
+    canvas2.pack(fill="both", expand=True)
+    canvas2.create_image(0, 0, image=bg, anchor="nw")
+    chose_play_frame._bg_image = bg
+
+    play_pvp_button = Button(chose_play_frame, text="Player vs Player", width=20, height=2, command=lambda: open_othello(root,player_vs_ai=False), bg="cyan", activebackground="dark turquoise")
+    play_pvp_button.place(relx=0.5, rely=0.4, anchor="n")
+    play_pvai_button = Button(chose_play_frame, text="Player vs AI", width=20, height=2, command=lambda: page("chose_level"), bg="gold", activebackground="dark goldenrod1")
+    play_pvai_button.place(relx=0.5, rely=0.5, anchor="n")
+    back_button = Button(chose_play_frame, text="Back", width=10, height=2, command=lambda: page("main"), bg="red2", activebackground="red3")
+    back_button.place(relx=0.5, rely=0.7, anchor="n")
+
+    chose_level_frame = Frame(root, bg="", bd=0)
+    canvas2 = Canvas(chose_level_frame, width=350, height=400, highlightthickness=0)
+    canvas2.pack(fill="both", expand=True)
+    canvas2.create_image(0, 0, image=bg, anchor="nw")
+    chose_level_frame._bg_image = bg
+
+    level_easy_button = Button(chose_level_frame, text="Easy", width=20, height=2, command=lambda: open_othello(root,player_vs_ai=True,level="easy"), bg="green2", activebackground="green3")
+    level_easy_button.place(relx=0.5, rely=0.4, anchor="n")
+    level_hard_button = Button(chose_level_frame, text="Hard", width=20, height=2, command=lambda: open_othello(root,player_vs_ai=True,level="hard"), bg="orange red", activebackground="OrangeRed3")
+    level_hard_button.place(relx=0.5, rely=0.5, anchor="n")
+    back_button = Button(chose_level_frame, text="Back", width=10, height=2, command=lambda: page("chose_play"), bg="red2", activebackground="red3")
+    back_button.place(relx=0.5, rely=0.7, anchor="n")
 
     root.mainloop()

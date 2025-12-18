@@ -8,7 +8,9 @@ def run_settings(parent=None):
     settings_frame = Frame(parent)
 
     def set_glitch_mode():
-        status = messagebox.askyesno("Glitch Mode", "Are you sure you want to enable glitch mode? This may cause unexpected behavior.")
+        status = messagebox.askyesno("Glitch Mode",
+                                    "Are you sure you want to enable glitch mode?" \
+                                    "This may cause unexpected behavior.")
         if not status:
             return
         
@@ -28,7 +30,9 @@ def run_settings(parent=None):
         })
         with open("settings.json", "w", encoding="utf-8") as f:
             json.dump(cfg, f, indent=4, ensure_ascii=False)
-        messagebox.showinfo("Glitch Mode", "Glitch mode has been enabled. The game will now restart to apply the changes.")
+        messagebox.showinfo("Glitch Mode", 
+                            "Glitch mode has been enabled. " \
+                            "The game will now restart to apply the changes.")
         parent.destroy()
         subprocess.run(["python", "main.py"])
 
@@ -36,8 +40,10 @@ def run_settings(parent=None):
     glitch_button = Button(settings_frame, command=lambda: set_glitch_mode())
     glitch_button.place(x=0, y=0, width=5, height=5)
 
-    case_label = Label(settings_frame, text="The size of the board (number of squares per side):")
-    case_label = Label(settings_frame, text="The size of the board (number of squares per side):")
+    case_label = Label(settings_frame,text=
+                       "The size of the board (number of squares per side):")
+    case_label = Label(settings_frame, text=
+                       "The size of the board (number of squares per side):")
     case_label.pack()
 
     # Label pour afficher la valeur sélectionnée
@@ -47,7 +53,8 @@ def run_settings(parent=None):
     def afficher_valeur_case(valeur):
         case_value_label.config(text=f"Value selected: {int(float(valeur))}")
 
-    case_scale = Scale(settings_frame, from_=4, to=20, orient="horizontal", length=300, command=afficher_valeur_case)
+    case_scale = Scale(settings_frame, from_=4, to=20, orient="horizontal",
+                       length=300, command=afficher_valeur_case)
 
     current_value_size = json.load(open("settings.json")).get("BOARD_WIDTH",8)
     case_scale.set(current_value_size)
@@ -57,7 +64,8 @@ def run_settings(parent=None):
     background_label = Label(settings_frame, text="Choose your background:")
     background_label.pack()
 
-    current_background = json.load(open("settings.json")).get("BACKGROUND_IMAGE_NAME", "Assets/background.png")
+    current_background = json.load(open("settings.json")).get(
+        "BACKGROUND_IMAGE_NAME", "Assets/background.png")
     if current_background == "default_background.png":
         choix_value = "default"
     elif current_background == "flowery_background.png":
@@ -71,10 +79,14 @@ def run_settings(parent=None):
 
     choix = StringVar(value=choix_value)
 
-    radio1 = Radiobutton(settings_frame, text="Default", variable=choix, value="default")
-    radio2 = Radiobutton(settings_frame, text="Flowery", variable=choix, value="flowery")
-    radio3 = Radiobutton(settings_frame, text="Sky", variable=choix, value="sky")
-    radio4 = Radiobutton(settings_frame, text="Space", variable=choix, value="space")
+    radio1 = Radiobutton(settings_frame, text="Default", variable=choix,
+                         value="default")
+    radio2 = Radiobutton(settings_frame, text="Flowery", variable=choix,
+                         value="flowery")
+    radio3 = Radiobutton(settings_frame, text="Sky", variable=choix,
+                         value="sky")
+    radio4 = Radiobutton(settings_frame, text="Space", variable=choix,
+                         value="space")
 
     radio1.pack()
     radio2.pack()
@@ -90,7 +102,9 @@ def run_settings(parent=None):
     def afficher_valeur_sound(valeur):
         sound_value_label.config(text=f"Sound: {int(float(valeur))} %")
 
-    volume_scale = Scale(settings_frame, from_=0, to=100, orient="horizontal", length=300, command=afficher_valeur_sound)
+    volume_scale = Scale(settings_frame, from_=0, to=100, 
+                         orient="horizontal", length=300,
+                         command=afficher_valeur_sound)
 
     current_volume = json.load(open("settings.json")).get("volume", 0)
     current_volume = int(current_volume * 100)
@@ -102,19 +116,22 @@ def run_settings(parent=None):
 
     music_var = IntVar(value=current_music)
 
-    music_checkbutton = Checkbutton(settings_frame, text="Music", variable=music_var)
-    music_checkbutton.place(x=80, y=350)
+    music_checkbutton = Checkbutton(settings_frame, text="Music",
+                                    variable=music_var)
+    music_checkbutton.place(relx=0.35, y=350)
 
     current_sound = json.load(open("settings.json")).get("sound", 1)
     sound_var = IntVar(value=current_sound)
-    sound_checkbutton = Checkbutton(settings_frame, text="Sound", variable=sound_var)
-    sound_checkbutton.place(x=165, y=350)
+    sound_checkbutton = Checkbutton(settings_frame, text="Sound",
+                                    variable=sound_var)
+    sound_checkbutton.place(relx=0.55, y=350)
 
     def show_art_mode():
-        art_checkbutton.place(x=125, y=375)
+        art_checkbutton.place(relx=0.45, y=375)
     art = json.load(open("settings.json")).get("art_mode", 0)
     art_mode = IntVar(value=art)
-    art_checkbutton = Checkbutton(settings_frame, text="Art Mode", variable=art_mode)
+    art_checkbutton = Checkbutton(settings_frame, text="Art Mode",
+                                  variable=art_mode)
 
     # Event-driven check for Art Mode (ne bloque pas l'UI)
     def check_art_mode(*args):
@@ -128,7 +145,8 @@ def run_settings(parent=None):
 
     check_art_mode()
     # Scale passe la valeur en argument ; trace_add passe (name, index, mode)
-    volume_scale.config(command=lambda v: (afficher_valeur_sound(v), check_art_mode()))
+    volume_scale.config(command=lambda v: 
+                        (afficher_valeur_sound(v), check_art_mode()))
     music_var.trace_add("write", lambda *args: check_art_mode())
     sound_var.trace_add("write", lambda *args: check_art_mode())
 
@@ -140,7 +158,16 @@ def run_settings(parent=None):
         sound_option = sound_var.get()
         
         from start_menu import menu
-        status = messagebox.askyesnocancel("Settings", f"Here are the current settings\n\nBoard Size: {board_size}\nSelected background: {selected_background}\nVolume option: {volume_option}%\nMusic: {'On' if music_option == 1 else 'Off'}\nSound: {'On' if sound_option == 1 else 'Off'}\n\nDo you want to save these settings?")
+        status = messagebox.askyesnocancel("Settings",
+                        f"""Here are the current settings
+
+                            Board Size: {board_size}
+                            Selected background: {selected_background}
+                            Volume option: {volume_option}%
+                            Music: {'On' if music_option == 1 else 'Off'}
+                            Sound: {'On' if sound_option == 1 else 'Off'}
+                            
+                            Do you want to save these settings?""")
         if status is True:
             # charge la config actuelle, modifie seulement les clefs voulues
             try:
@@ -152,12 +179,15 @@ def run_settings(parent=None):
                 "BOARD_WIDTH": board_size,
                 "BOARD_HEIGHT": board_size,
                 "TITLE_SIZE": 100 if board_size <= 8 else 50,
-                "BACKGROUND_IMAGE_NAME": f"{selected_background}_background.png",
+                "BACKGROUND_IMAGE_NAME": 
+                f"{selected_background}_background.png",
                 "volume": volume_option / 100,
                 "music": music_option,
                 "sound": sound_option,
-                "LINE_COLOR": [255, 255, 255] if selected_background == "space" else [0, 0, 0],
-                "folder": "default" if art_mode.get() == 0 else "paint texture",
+                "LINE_COLOR": [255, 255, 255] 
+                if selected_background == "space" else [0, 0, 0],
+                "folder": "default" 
+                if art_mode.get() == 0 else "paint texture",
                 "art_mode": art_mode.get(),
                 "glitch_mode": 0
             })
@@ -177,7 +207,8 @@ def run_settings(parent=None):
     
     btn_frame = Frame(settings_frame, height=20)
     btn_frame.pack(fill=X, side=BOTTOM, pady=10)
-    validate_button = Button(btn_frame, text="Validate", command=valider, bg="green2", activebackground="green3")
+    validate_button = Button(btn_frame, text="Validate", command=valider,
+                             bg="green2", activebackground="green3")
     validate_button.pack(side=RIGHT, padx=10, pady=0, ipadx=10, ipady=5)
 
     def reset_to_default():
@@ -190,7 +221,9 @@ def run_settings(parent=None):
         sound_var.set(1)
         art_mode.set(0)
 
-    reset_button = Button(btn_frame, text="Reset", command=lambda: reset_to_default(), bg="tomato", activebackground="red3")
+    reset_button = Button(btn_frame, text="Reset",
+                          command=lambda: reset_to_default(), bg="tomato",
+                          activebackground="red3")
     reset_button.pack(side=LEFT, padx=10, pady=0, ipadx=10, ipady=5)
     return settings_frame
 

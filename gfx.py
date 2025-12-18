@@ -6,7 +6,7 @@ import time
 pygame.init()
 pygame.font.init()
 
-
+###############################################################################
 
 BLACK   = (0, 0, 0)
 WHITE   = (255, 255, 255)
@@ -19,17 +19,23 @@ ORANGE  = (255, 145, 0)
 chrono = core.Chronometre()
 
 def _load_scaled(path):
-    return pygame.transform.scale(pygame.image.load(path).convert_alpha(), (core.TILE_SIZE, core.TILE_SIZE))
+    return pygame.transform.scale(pygame.image.load(path).convert_alpha(),
+                                  (core.TILE_SIZE, core.TILE_SIZE))
 
 def start_othello(starting_player=None):
     core.init_core(starting_player=starting_player)
-    global screen, background_tile, BLUE_PAWN, BLUE_FR1, BLUE_FR2, BLUE_FR3, RED_PAWN, RED_FR1, RED_FR2, RED_FR3, pause, FONT_DEFAULT, TITLE_FONT, UNDER_TITLE_FONT,folder
-    screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE+50])
+    global screen, background_tile, BLUE_PAWN, BLUE_FR1, BLUE_FR2, BLUE_FR3
+    global RED_PAWN, RED_FR1, RED_FR2, RED_FR3, pause, FONT_DEFAULT, TITLE_FONT
+    global UNDER_TITLE_FONT,folder
+    screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE,
+                                        core.BOARD_HEIGHT * core.TILE_SIZE+50])
     pygame.display.set_caption("MA-24 : Othello game")
 
     load_background = core.BACKGROUND_IMAGE_NAME
     background_image = pygame.image.load(load_background).convert()
-    background_tile = pygame.transform.scale(background_image, (core.TILE_SIZE * 8, core.TILE_SIZE * 8))
+    background_tile = pygame.transform.scale(background_image,
+                                                (core.TILE_SIZE * 8,
+                                                core.TILE_SIZE * 8))
     folder = json.load(open("settings.json")).get("folder","default")
     font = core.font
     gameIcon = pygame.image.load(f"Assets/{folder}/icon.png")
@@ -57,13 +63,16 @@ start_othello()
 bot = None
 level = None
 bot_move_time = None
-BOT_MOVE_DELAY_MS = 750
+BOT_MOVE_DELAY_MS = 600
 
-pause_btn_image = pygame.image.load(f"Assets/{folder}/buttons/pause_buttons.png").convert_alpha()
+pause_btn_image = pygame.image.load(
+    f"Assets/{folder}/buttons/pause_buttons.png").convert_alpha()
 pause_btn_image = pygame.transform.scale(pause_btn_image,(100,40))
-quit_btn_image = pygame.image.load(f"Assets/{folder}/buttons/quit_buttons.png").convert_alpha()
+quit_btn_image = pygame.image.load(
+    f"Assets/{folder}/buttons/quit_buttons.png").convert_alpha()
 quit_btn_image = pygame.transform.scale(quit_btn_image,(100,40))
-unpause_btn_image = pygame.image.load(f"Assets/{folder}/buttons/unpause_buttons.png").convert_alpha()
+unpause_btn_image = pygame.image.load(
+    f"Assets/{folder}/buttons/unpause_buttons.png").convert_alpha()
 unpause_btn_image = pygame.transform.scale(unpause_btn_image,(100,40))
 
 
@@ -172,7 +181,8 @@ def draw_player(coordinates, player):
 
     key = (x, y)
 
-    # faire avancer l'animation si la valeur est float (ex: 0.1/0.2/0.3 ou 1.1/1.2/1.3)
+    # faire avancer l'animation si la valeur est float 
+    # (ex: 0.1/0.2/0.3 ou 1.1/1.2/1.3)
     if isinstance(val, float):
         base = int(val)
         frac = round(val - base, 1)  # on attend 0.1, 0.2, 0.3
@@ -227,18 +237,21 @@ def draw_star(coordinates, player):
 
 def draw_hover_star(coordinates):
     x, y = coordinates
-    star = pygame.image.load(f"Assets/{folder}/stars/star.png")  # image jaune
+    # image jaune
+    star = pygame.image.load(f"Assets/{folder}/stars/star.png")  
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 
 def load_player():
-    # parcourt par ligne (y) puis colonne (x) — indexation cohérente grid[y][x]
+    # parcourt par ligne (y) puis colonne (x)
+    # indexation cohérente grid[y][x]
     for y in range(len(core.grid)):
         for x in range(len(core.grid[y])):
             val = core.grid[y][x]
             if val is not None:
                 draw_player((x, y), val)
-    # parcourt par ligne (y) puis colonne (x) — indexation cohérente grid[y][x]
+    # parcourt par ligne (y) puis colonne (x)
+    # indexation cohérente grid[y][x]
     for y in range(len(core.grid)):
         for x in range(len(core.grid[y])):
             val = core.grid[y][x]
@@ -267,7 +280,10 @@ def place_star(pos):
                 draw_star(move, core.current_player)
 
 def loadscreen():
-    repeat_bg()# Répéter le bloc 8x8 (background_tile) pour couvrir dynamiquement la taille du plateau (code de copilot UNIQUEMENT pour répéter l'arrière plan)
+    # Répéter le bloc 8x8 (background_tile) pour couvrir
+    # dynamiquement la taille du plateau
+    # (code de copilot UNIQUEMENT pour répéter l'arrière plan)
+    repeat_bg()
     draw_grid_lines(screen,core.BOARD_HEIGHT,core.BOARD_WIDTH)# draw_grid()
     load_player()
     draw_sidebar()
@@ -278,7 +294,9 @@ def loadscreen():
         rect_x = 0
         rect_y = (board_h - rect_h) // 2  # centre vertical
         pygame.draw.rect(screen, WHITE, (rect_x, rect_y, rect_w, rect_h), 0)
-        draw_text("The game is paused.", (rect_x + rect_w // 2, rect_y + rect_h // 2),font=TITLE_FONT, center=True)
+        draw_text("The game is paused.",
+                  (rect_x + rect_w // 2, rect_y + rect_h // 2),
+                  font=TITLE_FONT, center=True)
 
 def draw_gameover(winner,score_1, score_2) :
     # hauteur = 2 cases, largeur = largeur du plateau, centré verticalement
@@ -306,20 +324,27 @@ def draw_gameover(winner,score_1, score_2) :
     else:
         TITLE_FONT = pygame.font.SysFont("Arial", 38)
         UNDER_TITLE_FONT = pygame.font.SysFont("Georgia", 18)
-    draw_text(msg, (rect_x + rect_w // 2, rect_y + rect_h // 2),font=TITLE_FONT, color=color_winner, center=True)
+    draw_text(msg, (rect_x + rect_w // 2, rect_y + rect_h // 2),
+              font=TITLE_FONT, color=color_winner, center=True)
     
     chrono.pause()
     time = chrono.format_temps(chrono.temps_ecoule())
-    draw_text(time, (rect_x + rect_w // 2, rect_y + rect_h // 2 + core.TILE_SIZE // 3),font=TITLE_FONT, color=BLACK, center=True)
+    draw_text(time, (rect_x + rect_w // 2,
+                      rect_y + rect_h // 2 + core.TILE_SIZE // 3),
+                      font=TITLE_FONT, color=BLACK, center=True)
 
-    draw_text("click to continue", (rect_x + rect_w // 2, rect_y + rect_h // 2 + core.TILE_SIZE // 1.5),font=UNDER_TITLE_FONT, color=BLACK, center=True)
+    draw_text("click to continue",
+               (rect_x + rect_w // 2,
+                 rect_y + rect_h // 2 + core.TILE_SIZE // 1.5),
+                 font=UNDER_TITLE_FONT, color=BLACK, center=True)
     pygame.display.flip()
 def btn_ispressed(btn_pos):
     mouse_x, mouse_y = pygame.mouse.get_pos()
     btn_x,btn_y = btn_pos
     btn_widht = 100
     btn_height = 40
-    if (btn_x <= mouse_x <= btn_x + btn_widht and btn_y <= mouse_y <= btn_y + btn_height):
+    if (btn_x <= mouse_x <= btn_x + btn_widht and btn_y <= mouse_y <= btn_y
+        + btn_height):
         return True
 
 def pause_game():
@@ -349,7 +374,8 @@ def run_othello(bot_status, level_bot=None,starting_player=None):
                 if pause == False:
                     if bot and core.current_player == core.Player_2:
                         continue
-                    case = pos_to_case(pos, core.BOARD_HEIGHT, core.BOARD_WIDTH)
+                    case = pos_to_case(pos, core.BOARD_HEIGHT,
+                                       core.BOARD_WIDTH)
                     if case != None :
                         core.play(case)
                 if btn_ispressed(quit_btn_pos):
@@ -367,8 +393,10 @@ def run_othello(bot_status, level_bot=None,starting_player=None):
             place_star(pos)
             pygame.display.flip()
 
-        # Aide demander à Copilot pour implémenter un délai avant que le bot joue. Peux-tu m'aider à faire en sorte que le bot attende un certain délai avant de jouer son coup ?
-        if core.current_player == core.Player_2 and bot and not pause and core.gamerun:
+        # Aide demander à Copilot pour implémenter un délaiavant que 
+        # le bot joue. Peux-tu m'aider à faire en sorte que le bot 
+        # attende un certain délai avant de jouer son coup ?
+        if core.current_player == 1 and bot and not pause and core.gamerun:
             now = pygame.time.get_ticks()
             if bot_move_time is None:
                 bot_move_time = now + BOT_MOVE_DELAY_MS

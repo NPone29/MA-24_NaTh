@@ -1,32 +1,36 @@
 from tkinter import *
 from tkinter import messagebox
 import json
+import subprocess
 
 def run_settings(parent=None):
     global settings_frame
     settings_frame = Frame(parent)
-    
 
     def set_glitch_mode():
         status = messagebox.askyesno("Glitch Mode", "Are you sure you want to enable glitch mode? This may cause unexpected behavior.")
         if not status:
             return
-        # charger la config existante (si elle existe), puis modifier les clefs voulues
+        
         try:
             with open("settings.json", "r", encoding="utf-8") as f:
                 cfg = json.load(f)
         except Exception:
             cfg = {}
-        # mettre à jour uniquement les valeurs nécessaires
+        
         cfg.update({
-            "BACKGROUND_IMAGE_NAME": "Assets/glitch/background.png",
+            "BACKGROUND_IMAGE_NAME": "glitch_background.png",
             "TILE_SIZE": 100,
             "LINE_COLOR": [255, 0, 255],
-            # ne change pas BOARD_WIDTH/HEIGHT si tu ne veux pas les écraser ici
+            "folder": "glitch",
+            "art_mode": 0,
+            "glitch_mode": 1
         })
         with open("settings.json", "w", encoding="utf-8") as f:
             json.dump(cfg, f, indent=4, ensure_ascii=False)
-        messagebox.shosettings_framefo("Glitch Mode", "Glitch mode has been enabled. Please restart the game for changes to take effect.")
+        messagebox.showinfo("Glitch Mode", "Glitch mode has been enabled. The game will now restart to apply the changes.")
+        parent.destroy()
+        subprocess.run(["python", "main.py"])
 
 
     glitch_button = Button(settings_frame, command=lambda: set_glitch_mode())
@@ -60,13 +64,15 @@ def run_settings(parent=None):
         choix_value = "flowery"
     elif current_background == "sky_background.png":
         choix_value = "sky"
-    else:
+    elif current_background == "space_background.png":
         choix_value = "space"
+    else:
+        choix_value = "None"
 
     choix = StringVar(value=choix_value)
 
     radio1 = Radiobutton(settings_frame, text="Default", variable=choix, value="default")
-    radio2 = Radiobutton(settings_frame, text="Flowerly", variable=choix, value="flowery")
+    radio2 = Radiobutton(settings_frame, text="Flowery", variable=choix, value="flowery")
     radio3 = Radiobutton(settings_frame, text="Sky", variable=choix, value="sky")
     radio4 = Radiobutton(settings_frame, text="Space", variable=choix, value="space")
 
@@ -152,7 +158,8 @@ def run_settings(parent=None):
                 "sound": sound_option,
                 "LINE_COLOR": [255, 255, 255] if selected_background == "space" else [0, 0, 0],
                 "folder": "default" if art_mode.get() == 0 else "paint texture",
-                "art_mode": art_mode.get()
+                "art_mode": art_mode.get(),
+                "glitch_mode": 0
             })
             with open("settings.json", "w", encoding="utf-8") as json_file:
                 json.dump(cfg, json_file, indent=4, ensure_ascii=False)
@@ -160,8 +167,8 @@ def run_settings(parent=None):
             sd.stop_menu()
             sd.init_sound()
             sd.play_menu(True)
-            menu.page("main")
-            settings_frame.destroy()
+            parent.destroy()
+            subprocess.run(["python", "main.py"])
         elif status is False:
             menu.page("main")
             settings_frame.destroy()
@@ -181,6 +188,7 @@ def run_settings(parent=None):
         afficher_valeur_sound(volume_scale.get())
         music_var.set(1)
         sound_var.set(1)
+        art_mode.set(0)
 
     reset_button = Button(btn_frame, text="Reset", command=lambda: reset_to_default(), bg="tomato", activebackground="red3")
     reset_button.pack(side=LEFT, padx=10, pady=0, ipadx=10, ipady=5)

@@ -1,2 +1,4 @@
 from start_menu import menu
-menu.afficher_menu()
+
+if __name__ == "__main__":
+    menu.afficher_menu()

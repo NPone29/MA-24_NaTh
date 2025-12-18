@@ -2,7 +2,7 @@
     "BOARD_WIDTH": 8,
     "BOARD_HEIGHT": 8,
     "TITLE_SIZE": 100,
-    "BACKGROUND_IMAGE_NAME": "default_background.png",
+    "BACKGROUND_IMAGE_NAME": "flowery_background.png",
     "volume": 0.32,
     "music": 0,
     "sound": 1,
@@ -12,5 +12,7 @@
         0
     ],
     "folder": "default",
-    "art_mode": 0
+    "art_mode": 0,
+    "glitch_mode": 0,
+    "TILE_SIZE": 100
 }

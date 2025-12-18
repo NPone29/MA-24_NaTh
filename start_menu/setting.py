@@ -3,16 +3,9 @@ from tkinter import messagebox
 import json
 
 def run_settings(parent=None):
+    global settings_frame
+    settings_frame = Frame(parent)
     
-    if parent is None:
-        win = Tk()
-        own_mainloop = True #Code générer par copilot pour pouvoir éviter que le script s'arrète : comment faire pour que le menu ne s'arrète pas si j'aimerai aller 2 fois dans les settings ?
-    else:
-        win = Toplevel(parent)
-        own_mainloop = False
-
-    win.title("Othello Setting")
-    win.geometry("300x450")
 
     def set_glitch_mode():
         status = messagebox.askyesno("Glitch Mode", "Are you sure you want to enable glitch mode? This may cause unexpected behavior.")
@@ -33,15 +26,13 @@ def run_settings(parent=None):
         })
         with open("settings.json", "w", encoding="utf-8") as f:
             json.dump(cfg, f, indent=4, ensure_ascii=False)
-        messagebox.showinfo("Glitch Mode", "Glitch mode has been enabled. Please restart the game for changes to take effect.")
+        messagebox.shosettings_framefo("Glitch Mode", "Glitch mode has been enabled. Please restart the game for changes to take effect.")
 
 
-    glitch_button = Button(win, command=lambda: set_glitch_mode())
+    glitch_button = Button(settings_frame, command=lambda: set_glitch_mode())
     glitch_button.place(x=0, y=0, width=5, height=5)
 
-    case_label = Label(win, text="The size of the board (number of squares per side):")
-    global settings_frame
-    settings_frame = Frame(parent)
+    case_label = Label(settings_frame, text="The size of the board (number of squares per side):")
     case_label = Label(settings_frame, text="The size of the board (number of squares per side):")
     case_label.pack()
 
@@ -74,10 +65,10 @@ def run_settings(parent=None):
 
     choix = StringVar(value=choix_value)
 
-    radio1 = Radiobutton(win, text="Default", variable=choix, value="default")
-    radio2 = Radiobutton(win, text="Flowerly", variable=choix, value="flowery")
-    radio3 = Radiobutton(win, text="Sky", variable=choix, value="sky")
-    radio4 = Radiobutton(win, text="Space", variable=choix, value="space")
+    radio1 = Radiobutton(settings_frame, text="Default", variable=choix, value="default")
+    radio2 = Radiobutton(settings_frame, text="Flowerly", variable=choix, value="flowery")
+    radio3 = Radiobutton(settings_frame, text="Sky", variable=choix, value="sky")
+    radio4 = Radiobutton(settings_frame, text="Space", variable=choix, value="space")
 
     radio1.pack()
     radio2.pack()
@@ -117,7 +108,7 @@ def run_settings(parent=None):
         art_checkbutton.place(x=125, y=375)
     art = json.load(open("settings.json")).get("art_mode", 0)
     art_mode = IntVar(value=art)
-    art_checkbutton = Checkbutton(win, text="Art Mode", variable=art_mode)
+    art_checkbutton = Checkbutton(settings_frame, text="Art Mode", variable=art_mode)
 
     # Event-driven check for Art Mode (ne bloque pas l'UI)
     def check_art_mode(*args):

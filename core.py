@@ -32,6 +32,8 @@ def init_core():
         config = json.load(json_file)
     folder= config.get("folder","default")
     background = config.get("BACKGROUND_IMAGE_NAME", "default_background.png")
+    if background == "None_background.png":
+        background = "default_background.png"
     BACKGROUND_IMAGE_NAME = f"Assets/{folder}/backgrounds/{background}"
     BOARD_WIDTH = config.get("BOARD_WIDTH")
     BOARD_HEIGHT = config.get("BOARD_HEIGHT")

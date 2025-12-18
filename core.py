@@ -27,12 +27,12 @@ def create_grid(long,larg):
     return grid
 
 
-def init_core():
+def init_core(starting_player=None):
     global grid, skipped, gamerun, current_player,BACKGROUND_IMAGE_PATH,BOARD_WIDTH,BOARD_HEIGHT,TILE_SIZE,font,folder
     with open(json_file_path, 'r') as json_file:
         config = json.load(json_file)
     font = "Arial"
-    folder= "glitch"
+    folder= "default"
     BACKGROUND_IMAGE_PATH = f"Assets/{folder}/backgrounds/background.png"#config.get("BACKGROUND_IMAGE_PATH")
     BOARD_WIDTH = config.get("BOARD_WIDTH")
     BOARD_HEIGHT = config.get("BOARD_HEIGHT")
@@ -40,7 +40,13 @@ def init_core():
     grid = create_grid(BOARD_HEIGHT,BOARD_WIDTH)
     skipped =False
     gamerun = True
-    current_player = Player_1
+    if starting_player == "blue":
+        current_player = 0
+    elif starting_player == "red":
+        current_player = 1
+    else:
+        current_player = random.choice([0, 1])
+    print("Current Player at start:", current_player)
     
     
 

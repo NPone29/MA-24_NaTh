@@ -15,13 +15,14 @@ def open_setting(root):
     import start_menu.setting as setting
     setting.run_settings(root)
 
-def open_othello(root,player_vs_ai=False,level="easy"):
+def open_othello(root,player_vs_ai=False,level="easy",starting_player=None):
     sound.play_start()
     sound.stop_menu()
     root.destroy()
-    import gfx
-    gfx.run_othello(player_vs_ai,level)
     sound.init_sound()
+    print(starting_player)
+    import gfx
+    gfx.run_othello(player_vs_ai,level,starting_player=starting_player)
 
 
 def leave():
@@ -93,12 +94,22 @@ def afficher_menu():
     canvas2.create_image(0, 0, image=bg, anchor="nw")
     chose_play_frame._bg_image = bg
 
-    play_pvp_button = Button(chose_play_frame, text="Player vs Player", width=20, height=2, command=lambda: open_othello(root,player_vs_ai=False), bg="cyan", activebackground="dark turquoise")
+    play_pvp_button = Button(chose_play_frame, text="Player vs Player", width=20, height=2, command=lambda: open_othello(root,player_vs_ai=False,starting_player=whoplay_radio_var.get()), bg="cyan", activebackground="dark turquoise")
     play_pvp_button.place(relx=0.5, rely=0.4, anchor="n")
     play_pvai_button = Button(chose_play_frame, text="Player vs AI", width=20, height=2, command=lambda: page("chose_level"), bg="gold", activebackground="dark goldenrod1")
     play_pvai_button.place(relx=0.5, rely=0.5, anchor="n")
     back_button = Button(chose_play_frame, text="Back", width=10, height=2, command=lambda: page("main"), bg="red2", activebackground="red3")
-    back_button.place(relx=0.5, rely=0.7, anchor="n")
+    back_button.place(relx=0.5, rely=0.8, anchor="n")
+
+    whoplay_txt = Label(chose_play_frame, text="Who start to play ?", font=("Arial", 10),bg="lawn green")
+    whoplay_txt.place(relx=0.5, rely=0.6, anchor="n")
+    whoplay_radio_var = StringVar(value="rdm")
+    whoplay_radio_blue = Radiobutton(chose_play_frame, text="Blue", variable=whoplay_radio_var, value="blue", state=NORMAL,bg="green yellow", activebackground="yellow green")
+    whoplay_radio_blue.place(relx=0.45, rely=0.65, anchor="n")
+    whoplay_radio_red = Radiobutton(chose_play_frame, text="Red", variable=whoplay_radio_var, value="red", state=NORMAL,bg="green yellow", activebackground="yellow green")
+    whoplay_radio_red.place(relx=0.55, rely=0.65, anchor="n")
+    whoplay_radio_rdm = Radiobutton(chose_play_frame, text="Random", variable=whoplay_radio_var, value="rdm", state=NORMAL,bg="green yellow", activebackground="yellow green")
+    whoplay_radio_rdm.place(relx=0.5, rely=0.7, anchor="n")
 
     chose_level_frame = Frame(root, bg="", bd=0)
     canvas2 = Canvas(chose_level_frame, width=350, height=400, highlightthickness=0)
@@ -106,9 +117,9 @@ def afficher_menu():
     canvas2.create_image(0, 0, image=bg, anchor="nw")
     chose_level_frame._bg_image = bg
 
-    level_easy_button = Button(chose_level_frame, text="Easy", width=20, height=2, command=lambda: open_othello(root,player_vs_ai=True,level="easy"), bg="green2", activebackground="green3")
+    level_easy_button = Button(chose_level_frame, text="Easy", width=20, height=2, command=lambda: open_othello(root,player_vs_ai=True,level="easy",starting_player=whoplay_radio_var.get()), bg="green2", activebackground="green3")
     level_easy_button.place(relx=0.5, rely=0.4, anchor="n")
-    level_hard_button = Button(chose_level_frame, text="Hard", width=20, height=2, command=lambda: open_othello(root,player_vs_ai=True,level="hard"), bg="orange red", activebackground="OrangeRed3")
+    level_hard_button = Button(chose_level_frame, text="Hard", width=20, height=2, command=lambda: open_othello(root,player_vs_ai=True,level="hard",starting_player=whoplay_radio_var.get()), bg="orange red", activebackground="OrangeRed3")
     level_hard_button.place(relx=0.5, rely=0.5, anchor="n")
     back_button = Button(chose_level_frame, text="Back", width=10, height=2, command=lambda: page("chose_play"), bg="red2", activebackground="red3")
     back_button.place(relx=0.5, rely=0.7, anchor="n")

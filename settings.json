@@ -1,1 +1,1 @@
-{"BOARD_WIDTH": 8, "BOARD_HEIGHT": 8, "BACKGROUND_IMAGE_PATH": "Assets/backgrounds/space_background.png", "TILE_SIZE": 100, "volume": 0.5, "music": 1, "sound": 1, "LINE_COLOR": [255, 255, 255]}
+{"BOARD_WIDTH": 8, "BOARD_HEIGHT": 8, "BACKGROUND_IMAGE_PATH": "Assets/backgrounds/background.png", "TILE_SIZE": 100, "volume": 0.5, "music": 1, "sound": 1, "LINE_COLOR": [0, 0, 0]}

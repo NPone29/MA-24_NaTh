@@ -21,8 +21,8 @@ chrono = core.Chronometre()
 def _load_scaled(path):
     return pygame.transform.scale(pygame.image.load(path).convert_alpha(), (core.TILE_SIZE, core.TILE_SIZE))
 
-def start_othello():
-    core.init_core()
+def start_othello(starting_player=None):
+    core.init_core(starting_player=starting_player)
     global screen, background_tile, BLUE_PAWN, BLUE_FR1, BLUE_FR2, BLUE_FR3, RED_PAWN, RED_FR1, RED_FR2, RED_FR3, pause, FONT_DEFAULT, TITLE_FONT, UNDER_TITLE_FONT,folder
     screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE+50])
     pygame.display.set_caption("MA-24 : Othello game")
@@ -330,12 +330,12 @@ def pause_game():
     else:
         chrono.start()
 
-def run_othello(bot_status, level_bot=None):
+def run_othello(bot_status, level_bot=None,starting_player=None):
     global bot, level, bot_move_time
     if bot_status:
         bot = True
         level = level_bot
-    start_othello()
+    start_othello(starting_player=starting_player)
     sound.play_game_music(True)
     running = True
     clock = pygame.time.Clock()

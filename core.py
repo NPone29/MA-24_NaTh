@@ -5,6 +5,8 @@ from tkinter import messagebox
 import time
 import random
 
+###############################################################################
+
 json_file_path = "settings.json"
 
 def create_grid(long,larg):
@@ -27,7 +29,8 @@ def create_grid(long,larg):
 
 
 def init_core(starting_player=None):
-    global grid, skipped, gamerun, current_player,BACKGROUND_IMAGE_NAME,BOARD_WIDTH,BOARD_HEIGHT,TILE_SIZE,font,folder
+    global grid, skipped, gamerun, current_player
+    global BACKGROUND_IMAGE_NAME,BOARD_WIDTH,BOARD_HEIGHT,TILE_SIZE,font,folder
     with open(json_file_path, 'r') as json_file:
         config = json.load(json_file)
     folder= config.get("folder","default")
@@ -64,7 +67,10 @@ def get_next_player(current_player):
 
 
 def is_on_board(x, y):
-    return 0 <= x < BOARD_WIDTH and 0 <= y < BOARD_HEIGHT #Idée de copilot, parce que je n'avais pas d'idée de comment faire. Comment faire pour faire une fonction qui regarde si le pion est bien dans le
+    #Idée de copilot, parce que je n'avais pas d'idée de comment faire.
+    # Comment faire pour faire une fonction qui regarde si le pion est bien
+    # sur le plateau ?
+    return 0 <= x < BOARD_WIDTH and 0 <= y < BOARD_HEIGHT 
 
 def rules(grid, player, coordinates, dx, dy):
     captured = []
@@ -99,7 +105,11 @@ def play(coordinates):
         return
 
     all_captured = []
-    for dx in [-1, 0, 1]: # Idée de copilot pour faire cette boucle imbriquée. Parce que j'avais des problèmes alors j'ai lui ai demandé pour débuger. "Y a t'il des problèmes dans ma fonction play ?"
+
+    # Idée de copilot pour faire cette boucle imbriquée.
+    # Parce que j'avais des problèmes alors j'ai lui ai demandé pour débuger.
+    # "Y a t'il des problèmes dans ma fonction play ?"
+    for dx in [-1, 0, 1]:
         for dy in [-1, 0, 1]:
             if dx == 0 and dy == 0:
                 continue
@@ -131,7 +141,8 @@ def check_legal_moves(player):
                         captured = rules(grid, player, (x, y), dx, dy)
                         if captured:
                             legal_moves.append((x, y))
-                            # dès qu'une direction capture, c'est un coup légal -> passer à la case suivante
+                            # dès qu'une direction capture, c'est un coup légal
+                            # -> passer à la case suivante
                             dx = dy = None
                             break
                     if dx is None:
@@ -238,7 +249,11 @@ def choose_move_random(player):
     moves = check_legal_moves(player)
     return random.choice(moves) if moves else None
 
-def choose_move_greedy(player): # J'ai demandé de l'aide à copilot pour cette fonction. Parce que je ne savais pas comment faire. "Peux tu m'aider à faire une fonction qui choisit le meilleur coup possible en fonction du nombre de pions capturés ?"
+# J'ai demandé de l'aide à copilot pour cette fonction.
+# Parce que je ne savais pas comment faire. 
+# "Peux tu m'aider à faire une fonction qui choisit le meilleur coup possible 
+# en fonction du nombre de pions capturés ?"
+def choose_move_greedy(player):
     moves = check_legal_moves(player)
     if not moves:
         return None

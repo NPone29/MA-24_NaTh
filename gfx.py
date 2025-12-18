@@ -27,10 +27,10 @@ def start_othello():
     screen = pygame.display.set_mode([core.BOARD_WIDTH * core.TILE_SIZE, core.BOARD_HEIGHT * core.TILE_SIZE+50])
     pygame.display.set_caption("MA-24 : Othello game")
 
-    load_background = core.BACKGROUND_IMAGE_PATH
+    load_background = core.BACKGROUND_IMAGE_NAME
     background_image = pygame.image.load(load_background).convert()
     background_tile = pygame.transform.scale(background_image, (core.TILE_SIZE * 8, core.TILE_SIZE * 8))
-    folder = core.folder
+    folder = json.load(open("settings.json")).get("folder","default")
     font = core.font
     gameIcon = pygame.image.load(f"Assets/{folder}/icon.png")
     pygame.display.set_icon(gameIcon)

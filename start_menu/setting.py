@@ -14,6 +14,31 @@ def run_settings(parent=None):
     win.title("Othello Setting")
     win.geometry("300x450")
 
+    def set_glitch_mode():
+        status = messagebox.askyesno("Glitch Mode", "Are you sure you want to enable glitch mode? This may cause unexpected behavior.")
+        if not status:
+            return
+        # charger la config existante (si elle existe), puis modifier les clefs voulues
+        try:
+            with open("settings.json", "r", encoding="utf-8") as f:
+                cfg = json.load(f)
+        except Exception:
+            cfg = {}
+        # mettre à jour uniquement les valeurs nécessaires
+        cfg.update({
+            "BACKGROUND_IMAGE_NAME": "Assets/glitch/background.png",
+            "TILE_SIZE": 100,
+            "LINE_COLOR": [255, 0, 255],
+            # ne change pas BOARD_WIDTH/HEIGHT si tu ne veux pas les écraser ici
+        })
+        with open("settings.json", "w", encoding="utf-8") as f:
+            json.dump(cfg, f, indent=4, ensure_ascii=False)
+        messagebox.showinfo("Glitch Mode", "Glitch mode has been enabled. Please restart the game for changes to take effect.")
+
+
+    glitch_button = Button(win, command=lambda: set_glitch_mode())
+    glitch_button.place(x=0, y=0, width=5, height=5)
+
     case_label = Label(win, text="The size of the board (number of squares per side):")
     case_label.pack()
 
@@ -34,12 +59,12 @@ def run_settings(parent=None):
     background_label = Label(win, text="Choose your background:")
     background_label.pack()
 
-    current_background = json.load(open("settings.json")).get("BACKGROUND_IMAGE_PATH", "Assets/background.png")
-    if current_background == "Assets/backgrounds/background.png":
+    current_background = json.load(open("settings.json")).get("BACKGROUND_IMAGE_NAME", "Assets/background.png")
+    if current_background == "default_background.png":
         choix_value = "default"
-    elif current_background == "Assets/backgrounds/flowery_background.png":
-        choix_value = "flowerly"
-    elif current_background == "Assets/backgrounds/sky_background.png":
+    elif current_background == "flowery_background.png":
+        choix_value = "flowery"
+    elif current_background == "sky_background.png":
         choix_value = "sky"
     else:
         choix_value = "space"
@@ -47,7 +72,7 @@ def run_settings(parent=None):
     choix = StringVar(value=choix_value)
 
     radio1 = Radiobutton(win, text="Default", variable=choix, value="default")
-    radio2 = Radiobutton(win, text="Flowerly", variable=choix, value="flowerly")
+    radio2 = Radiobutton(win, text="Flowerly", variable=choix, value="flowery")
     radio3 = Radiobutton(win, text="Sky", variable=choix, value="sky")
     radio4 = Radiobutton(win, text="Space", variable=choix, value="space")
 
@@ -85,6 +110,28 @@ def run_settings(parent=None):
     sound_checkbutton = Checkbutton(win, text="Sound", variable=sound_var)
     sound_checkbutton.place(x=165, y=350)
 
+    def show_art_mode():
+        art_checkbutton.place(x=125, y=375)
+    art = json.load(open("settings.json")).get("art_mode", 0)
+    art_mode = IntVar(value=art)
+    art_checkbutton = Checkbutton(win, text="Art Mode", variable=art_mode)
+
+    # Event-driven check for Art Mode (ne bloque pas l'UI)
+    def check_art_mode(*args):
+        if int(volume_scale.get()) == 32 and music_var.get() == 0 and sound_var.get() == 1:
+            show_art_mode()
+        else:
+            try:
+                art_checkbutton.place_forget()
+            except Exception:
+                pass
+
+    check_art_mode()
+    # Scale passe la valeur en argument ; trace_add passe (name, index, mode)
+    volume_scale.config(command=lambda v: (afficher_valeur_sound(v), check_art_mode()))
+    music_var.trace_add("write", lambda *args: check_art_mode())
+    sound_var.trace_add("write", lambda *args: check_art_mode())
+
     def valider():
         board_size = int(case_scale.get())
         selected_background = choix.get()
@@ -93,19 +140,26 @@ def run_settings(parent=None):
         sound_option = sound_var.get()
         status = messagebox.askyesnocancel("Settings", f"Here are the current settings\n\nBoard Size: {board_size}\nSelected background: {selected_background}\nVolume option: {volume_option}%\nMusic: {'On' if music_option == 1 else 'Off'}\nSound: {'On' if sound_option == 1 else 'Off'}\n\nDo you want to save these settings?")
         if status is True:
-            import json
-            config = {
+            # charge la config actuelle, modifie seulement les clefs voulues
+            try:
+                with open("settings.json", "r", encoding="utf-8") as f:
+                    cfg = json.load(f)
+            except Exception:
+                cfg = {}
+            cfg.update({
                 "BOARD_WIDTH": board_size,
                 "BOARD_HEIGHT": board_size,
-                "BACKGROUND_IMAGE_PATH": "Assets/backgrounds/background.png" if selected_background == "default" else "Assets/backgrounds/flowery_background.png" if selected_background == "flowerly" else "Assets/backgrounds/sky_background.png" if selected_background == "sky" else "Assets/backgrounds/space_background.png",
-                "TILE_SIZE": 100 if board_size <= 10 else 50,
+                "TITLE_SIZE": 100 if board_size <= 8 else 50,
+                "BACKGROUND_IMAGE_NAME": f"{selected_background}_background.png",
                 "volume": volume_option / 100,
-                "music": music_var.get(),
-                "sound": sound_var.get(),
-                "LINE_COLOR": (255, 255, 255) if selected_background == "space" else (0, 0, 0)
-            }
-            with open("settings.json", 'w') as json_file:
-                json.dump(config, json_file)
+                "music": music_option,
+                "sound": sound_option,
+                "LINE_COLOR": [255, 255, 255] if selected_background == "space" else [0, 0, 0],
+                "folder": "default" if art_mode.get() == 0 else "paint texture",
+                "art_mode": art_mode.get()
+            })
+            with open("settings.json", "w", encoding="utf-8") as json_file:
+                json.dump(cfg, json_file, indent=4, ensure_ascii=False)
             import sound as sd
             sd.stop_menu()
             sd.init_sound()

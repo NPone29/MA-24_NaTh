@@ -32,8 +32,8 @@ def init_core():
     with open(json_file_path, 'r') as json_file:
         config = json.load(json_file)
     font = "Arial"
-    folder= "default"
-    BACKGROUND_IMAGE_PATH = f"Assets/{folder}/backgrounds/sky_background.png"#config.get("BACKGROUND_IMAGE_PATH")
+    folder= "glitch"
+    BACKGROUND_IMAGE_PATH = f"Assets/{folder}/backgrounds/background.png"#config.get("BACKGROUND_IMAGE_PATH")
     BOARD_WIDTH = config.get("BOARD_WIDTH")
     BOARD_HEIGHT = config.get("BOARD_HEIGHT")
     TILE_SIZE = config.get("TILE_SIZE")

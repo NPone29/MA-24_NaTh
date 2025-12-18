@@ -2,9 +2,9 @@
     "BOARD_WIDTH": 8,
     "BOARD_HEIGHT": 8,
     "TITLE_SIZE": 100,
-    "BACKGROUND_IMAGE_NAME": "flowery_background.png",
-    "volume": 0.32,
-    "music": 0,
+    "BACKGROUND_IMAGE_NAME": "default_background.png",
+    "volume": 0.5,
+    "music": 1,
     "sound": 1,
     "LINE_COLOR": [
         0,

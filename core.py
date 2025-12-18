@@ -239,18 +239,36 @@ def choose_move_random(player):
     return random.choice(moves) if moves else None
 
 def choose_move_greedy(player): # J'ai demandé de l'aide à copilot pour cette fonction. Parce que je ne savais pas comment faire. "Peux tu m'aider à faire une fonction qui choisit le meilleur coup possible en fonction du nombre de pions capturés ?"
+    moves = check_legal_moves(player)
+    if not moves:
+        return None
+
+    corners = [
+        (0, 0),
+        (BOARD_WIDTH - 1, 0),
+        (0, BOARD_HEIGHT - 1),
+        (BOARD_WIDTH - 1, BOARD_HEIGHT - 1),
+    ]
+    for c in corners:
+        if c in moves:
+            return c
+        
     best = None
-    best_count = -1
-    for move in check_legal_moves(player):
+    best_score = -10**9
+    for x, y in moves:
         total = 0
-        x, y = move
         for dx in (-1, 0, 1):
             for dy in (-1, 0, 1):
                 if dx == 0 and dy == 0:
                     continue
                 caps = rules(grid, player, (x, y), dx, dy)
                 total += len(caps)
-        if total > best_count:
-            best_count = total
-            best = move
+        bonus = 0
+        
+        if x == 0 or x == BOARD_WIDTH - 1 or y == 0 or y == BOARD_HEIGHT - 1:
+            bonus += 2
+        score = total + bonus
+        if score > best_score:
+            best_score = score
+            best = (x, y)
     return best

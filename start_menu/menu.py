@@ -20,9 +20,9 @@ def open_othello(root,player_vs_ai=False,level="easy",starting_player=None):
     sound.play_start()
     sound.stop_menu()
     root.destroy()
-    sound.init_sound()
     print(starting_player)
     import gfx
+    sound.init_sound()
     gfx.run_othello(player_vs_ai,level,starting_player=starting_player)
 
 

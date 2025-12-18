@@ -7,7 +7,6 @@ import random
 
 json_file_path = "settings.json"
 
-
 def create_grid(long,larg):
     grid = []
     for i in range(long):
@@ -28,15 +27,16 @@ def create_grid(long,larg):
 
 
 def init_core(starting_player=None):
-    global grid, skipped, gamerun, current_player,BACKGROUND_IMAGE_PATH,BOARD_WIDTH,BOARD_HEIGHT,TILE_SIZE,font,folder
+    global grid, skipped, gamerun, current_player,BACKGROUND_IMAGE_NAME,BOARD_WIDTH,BOARD_HEIGHT,TILE_SIZE,font,folder
     with open(json_file_path, 'r') as json_file:
         config = json.load(json_file)
-    font = "Arial"
-    folder= "default"
-    BACKGROUND_IMAGE_PATH = f"Assets/{folder}/backgrounds/background.png"#config.get("BACKGROUND_IMAGE_PATH")
+    folder= config.get("folder","default")
+    background = config.get("BACKGROUND_IMAGE_NAME", "default_background.png")
+    BACKGROUND_IMAGE_NAME = f"Assets/{folder}/backgrounds/{background}"
     BOARD_WIDTH = config.get("BOARD_WIDTH")
     BOARD_HEIGHT = config.get("BOARD_HEIGHT")
-    TILE_SIZE = config.get("TILE_SIZE")
+    TILE_SIZE = config.get("TITLE_SIZE")
+    font = "Arial"
     grid = create_grid(BOARD_HEIGHT,BOARD_WIDTH)
     skipped =False
     gamerun = True

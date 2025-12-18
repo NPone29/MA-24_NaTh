@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import webbrowser
+import json
 
 import sound
 
@@ -60,7 +61,7 @@ def afficher_menu():
     root.geometry("450x500")
     import core
     core.init_core()
-    folder= core.folder
+    folder= json.load(open("settings.json")).get("folder","default")
     original_image = Image.open(f"Assets/{folder}/backgrounds/menu_background.png")
     bg_resized = original_image.resize((450, 500), Image.LANCZOS)
     bg = ImageTk.PhotoImage(bg_resized)

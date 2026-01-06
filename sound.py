@@ -1,5 +1,9 @@
 from pygame import mixer
 import json
+import core
+
+core.init_core()
+folder = core.folder
 
 def init_sound():
     global volume, music_on, sound_on
@@ -12,27 +16,27 @@ def init_sound():
     sound_on = config.get("sound", 1)
 mixer.init()
 try:
-    POP_SOUND = mixer.Sound("Assets/sounds/pop.mp3")
+    POP_SOUND = mixer.Sound(f"Assets/{folder}/sounds/pop.mp3")
 except Exception:
     POP_SOUND = None
 
 try:
-    MENU_SOUND = mixer.Sound("Assets/sounds/menu.mp3")
+    MENU_SOUND = mixer.Sound(f"Assets/{folder}/sounds/menu.mp3")
 except Exception:
     MENU_SOUND = None
 
 try:
-    START_SOUND = mixer.Sound("Assets/sounds/start.mp3")
+    START_SOUND = mixer.Sound(f"Assets/{folder}/sounds/start.mp3")
 except Exception:
     START_SOUND = None
 
 try:
-    GAME_MUSIC = mixer.Sound("Assets/sounds/game_music.mp3")
+    GAME_MUSIC = mixer.Sound(f"Assets/{folder}/sounds/game_music.mp3")
 except Exception:
     GAME_MUSIC = None
 
 try:
-    WINNER_MUSIC = mixer.Sound("Assets/sounds/winner.mp3")
+    WINNER_MUSIC = mixer.Sound(f"Assets/{folder}/sounds/winner.mp3")
 except Exception:
     WINNER_MUSIC = None
 

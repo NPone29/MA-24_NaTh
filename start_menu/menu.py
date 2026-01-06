@@ -10,15 +10,16 @@ import sound
 
 sound.init_sound()
 
-def afficher_credit():
+def afficher_credit(): # Fonction qui affiche les crédits
     if messagebox.askyesno("Credits","""Developed by NPone29 and EscorpionTheo.
                            Would you like to buy us a coffee ?""") :
         webbrowser.open("https://buymeacoffee.com/npone29")
 
-def open_setting(root):
+def open_setting(root): # fonction qui va remplacer afficher la page du menu
     import start_menu.setting as setting
     setting.run_settings(root)
 
+#fonction qui va lancer le jeu avec les arguments de lancement
 def open_othello(root,player_vs_ai=False,level="easy",starting_player=None):
     sound.play_start()
     sound.stop_menu()
@@ -28,7 +29,7 @@ def open_othello(root,player_vs_ai=False,level="easy",starting_player=None):
     sound.init_sound()
     gfx.run_othello(player_vs_ai,level,starting_player=starting_player)
 
-
+#fonction qui va fermer le programme avec une pop-up de validation
 def leave():
     if messagebox.askyesno("do you want to leave?",
                            "Do you really want to quit the game?"):
@@ -36,6 +37,7 @@ def leave():
         import sys
         sys.exit()
 
+#fonction qui affiche une page correspondant à l'argument
 def page(page_name):
     global main_frame,chose_play_frame,chose_level_frame,root
     from start_menu import setting
@@ -57,6 +59,7 @@ def page(page_name):
         setting.run_settings(root).pack(fill=BOTH, expand=True)
         print("settings page")
 
+# fonction qui va afficher tout le menu
 def afficher_menu():
     global main_frame,chose_play_frame,chose_level_frame,root
     sound.play_menu(loop=True)
@@ -178,5 +181,6 @@ def afficher_menu():
                          command=lambda: page("chose_play"), bg="red2", 
                          activebackground="red3")
     back_button.place(relx=0.5, rely=0.7, anchor="n")
+
 
     root.mainloop()

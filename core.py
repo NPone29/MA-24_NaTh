@@ -5,10 +5,11 @@ from tkinter import messagebox
 import time
 import random
 
-###############################################################################
 
+# Chemin vers le fichier de configuration JSON
 json_file_path = "settings.json"
 
+# Création de la grille en fonction de sa longueur
 def create_grid(long,larg):
     grid = []
     for i in range(long):
@@ -28,6 +29,8 @@ def create_grid(long,larg):
     return grid
 
 
+# Initialisation du jeu en deffinissant les joueurs, le 
+# plateau et les images 
 def init_core(starting_player=None):
     global grid, skipped, gamerun, current_player
     global BACKGROUND_IMAGE_NAME,BOARD_WIDTH,BOARD_HEIGHT,TILE_SIZE,font,folder
@@ -55,10 +58,10 @@ def init_core(starting_player=None):
     
     
 
-Player_1 = 0
-Player_2 = 1
+Player_1 = 0 # Bleu
+Player_2 = 1 # Rouge
 
-
+# Inversion du joueur qui joue
 def get_next_player(current_player):
     if current_player == Player_1:
         return Player_2
@@ -68,10 +71,11 @@ def get_next_player(current_player):
 
 def is_on_board(x, y):
     #Idée de copilot, parce que je n'avais pas d'idée de comment faire.
-    # Comment faire pour faire une fonction qui regarde si le pion est bien
-    # sur le plateau ?
+    # "Comment faire pour faire une fonction qui regarde si le pion est bien
+    # sur le plateau ?"
     return 0 <= x < BOARD_WIDTH and 0 <= y < BOARD_HEIGHT 
 
+# Fonction qui permet de retourner les pions
 def rules(grid, player, coordinates, dx, dy):
     captured = []
     x, y = coordinates
@@ -87,7 +91,7 @@ def rules(grid, player, coordinates, dx, dy):
     return []
 
 
-
+# Fonction qui appelle toutes les autre pour permettre au joueur de jouer.
 def play(coordinates):
     global grid, current_player
 
@@ -129,6 +133,7 @@ def play(coordinates):
 
     current_player = get_next_player(current_player)
 
+# Vérifie renvoit toutes les positions que le joueur peut jouer
 def check_legal_moves(player):
     legal_moves = []
     for x in range(BOARD_WIDTH):
@@ -150,6 +155,8 @@ def check_legal_moves(player):
     return legal_moves
 
 
+# Si un joueur n'a pas de coup il vca passer son tour.
+# Et si personne ne peut jouer, le jeu se termine
 def skip_player():
     global skipped, current_player
 
@@ -164,6 +171,9 @@ def skip_player():
             skipped = True
     else :
         skipped = False
+
+# Calcul du score en se basant sur le nombre de pions dans
+# la grille
 def calcul_score():
     score_player1 = 0
     score_player2 = 0
@@ -177,7 +187,7 @@ def calcul_score():
     return score_player1,score_player2
 
 
-
+# Affichage de l'écran de fin
 def gameover() :
     import gfx
     global gamerun
@@ -200,6 +210,7 @@ def gameover() :
 
     gfx.draw_gameover(winnerplayer,score_player1,score_player2)
 
+# Fonction qui demande au joueur s'il souhaite vraiment quitter
 def leave_game():
     
     if messagebox.askyesno("Leave Game", "Do you want to leave the game?"):
@@ -245,6 +256,7 @@ class Chronometre: #Le web m'a aidé pour cette classe.
         secs = int(secondes % 60)
         return f"{heures:02}:{minutes:02}:{secs:02}"
 
+# Le bot choisi un coup aléatoire s'il peut jouer.
 def choose_move_random(player):
     moves = check_legal_moves(player)
     return random.choice(moves) if moves else None

@@ -3,10 +3,12 @@ from tkinter import messagebox
 import json
 import subprocess
 
+# fonction qui va définir la frame des settings comme page
 def run_settings(parent=None):
     global settings_frame
     settings_frame = Frame(parent)
 
+    # fonction permettant de définir le mode graphique "glitch"
     def set_glitch_mode():
         status = messagebox.askyesno("Glitch Mode",
                                     "Are you sure you want to enable glitch mode?" \
@@ -33,6 +35,9 @@ def run_settings(parent=None):
         messagebox.showinfo("Glitch Mode", 
                             "Glitch mode has been enabled. " \
                             "The game will now restart to apply the changes.")
+        import sound as sd
+        sd.stop_menu()
+        sd.init_sound()
         parent.destroy()
         subprocess.run(["python", "main.py"])
 
@@ -50,6 +55,7 @@ def run_settings(parent=None):
     case_value_label = Label(settings_frame, text="Value selected: 0")
     case_value_label.pack()
 
+    # fonction qui va afficher la valeur de la taille du plateau.
     def afficher_valeur_case(valeur):
         case_value_label.config(text=f"Value selected: {int(float(valeur))}")
 
@@ -99,6 +105,7 @@ def run_settings(parent=None):
     sound_value_label = Label(settings_frame, text="Sound: 0")
     sound_value_label.pack()
 
+    #fonction qui va afficher le volume du son
     def afficher_valeur_sound(valeur):
         sound_value_label.config(text=f"Sound: {int(float(valeur))} %")
 
@@ -150,6 +157,7 @@ def run_settings(parent=None):
     music_var.trace_add("write", lambda *args: check_art_mode())
     sound_var.trace_add("write", lambda *args: check_art_mode())
 
+    # fonction qui va enregistrer les valeurs dans le fichiers json
     def valider():
         board_size = int(case_scale.get())
         selected_background = choix.get()
@@ -211,6 +219,7 @@ def run_settings(parent=None):
                              bg="green2", activebackground="green3")
     validate_button.pack(side=RIGHT, padx=10, pady=0, ipadx=10, ipady=5)
 
+    #fonctio^n qui va rétablir tout les paramètre au valeur par default
     def reset_to_default():
         case_scale.set(8)
         afficher_valeur_case(case_scale.get())

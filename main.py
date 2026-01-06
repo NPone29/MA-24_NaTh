@@ -1,6 +1,8 @@
 import os
 import json
 
+
+#Parameter par defauts
 DEFAULT_SETTINGS = {
     "BOARD_WIDTH": 8,
     "BOARD_HEIGHT": 8,
@@ -16,6 +18,9 @@ DEFAULT_SETTINGS = {
     "TILE_SIZE": 100
 }
 
+
+# Vérification si le ficher settings.json existe,
+# sinon le créer avec les paramètres par défaut
 def ensure_settings(path="settings.json"):
     if not os.path.exists(path):
         try:
@@ -27,8 +32,10 @@ def ensure_settings(path="settings.json"):
             print("Impossible de créer settings.json :", e)
             exit(1)
 
+
+# lancement du programme
 if __name__ == "__main__":
     ensure_settings(path="settings.json")
     from start_menu import menu
-    menu.afficher_menu()
+    menu.afficher_menu() #affichage du menu de démarrage
 

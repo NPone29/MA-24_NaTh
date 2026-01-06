@@ -3,11 +3,12 @@ import core
 import json
 import sound
 import time
+
+# Initialisation de pygame
 pygame.init()
 pygame.font.init()
 
-###############################################################################
-
+# Création de couleur
 BLACK   = (0, 0, 0)
 WHITE   = (255, 255, 255)
 BLUE    = (3, 140, 252)
@@ -16,12 +17,15 @@ GREEN   = (20, 163, 58)
 GRAY    = (40, 40, 40)
 ORANGE  = (255, 145, 0)
 
+# Création du chronomètre
 chrono = core.Chronometre()
 
+# Chargement des images de pions et de redimenionnement
 def _load_scaled(path):
     return pygame.transform.scale(pygame.image.load(path).convert_alpha(),
                                   (core.TILE_SIZE, core.TILE_SIZE))
 
+# Initialisations du jeu et de la fenêtre
 def start_othello(starting_player=None):
     core.init_core(starting_player=starting_player)
     global screen, background_tile, BLUE_PAWN, BLUE_FR1, BLUE_FR2, BLUE_FR3
@@ -36,6 +40,7 @@ def start_othello(starting_player=None):
     background_tile = pygame.transform.scale(background_image,
                                                 (core.TILE_SIZE * 8,
                                                 core.TILE_SIZE * 8))
+    
     folder = json.load(open("settings.json")).get("folder","default")
     font = core.font
     gameIcon = pygame.image.load(f"Assets/{folder}/icon.png")
@@ -49,8 +54,6 @@ def start_othello(starting_player=None):
     RED_FR2       = _load_scaled(f"Assets/{folder}/pawns/red_pawn_fr2.png")
     RED_FR3       = _load_scaled(f"Assets/{folder}/pawns/red_pawn_fr3.png")
 
-    
-
     FONT_DEFAULT = pygame.font.SysFont(f"{font}", 28)
     TITLE_FONT = pygame.font.SysFont(f"{font}", 38)
     UNDER_TITLE_FONT = pygame.font.SysFont(f"{font}", 18)
@@ -60,11 +63,14 @@ def start_othello(starting_player=None):
 
 start_othello()
 
+# Paramètre du Bot
 bot = None
 level = None
 bot_move_time = None
 BOT_MOVE_DELAY_MS = 600
 
+
+# Importation des images des boutons
 pause_btn_image = pygame.image.load(
     f"Assets/{folder}/buttons/pause_buttons.png").convert_alpha()
 pause_btn_image = pygame.transform.scale(pause_btn_image,(100,40))
@@ -77,11 +83,13 @@ unpause_btn_image = pygame.transform.scale(unpause_btn_image,(100,40))
 
 
 
-
+#paramètre des animations
 ANIM_INTERVAL_MS = 100
 _anim_timestamps = {}  # clé = (x,y) -> dernier tick d'avancement
 
 
+# Renvoit la position que le piont doit avoir en fonction 
+# de la grille
 def pos_to_case(pos,long,larg):
     x =int(pos[0] / core.TILE_SIZE)
     y=int(pos[1] / core.TILE_SIZE)
@@ -94,6 +102,7 @@ def pos_to_case(pos,long,larg):
             y% long,
         )
 
+# Dessin des lignes
 def draw_line(screen, start, end):
 
     json_file_path = "settings.json"
@@ -108,6 +117,8 @@ def draw_line(screen, start, end):
         (end[0] * core.TILE_SIZE, end[1] * core.TILE_SIZE),
         line_larger
     )
+
+# Fonction qui permet d'écrire du texte
 def draw_text(text, pos, font=FONT_DEFAULT, color=BLACK, center=False):
     surf = font.render(str(text), True, color)
     if center:
@@ -116,6 +127,7 @@ def draw_text(text, pos, font=FONT_DEFAULT, color=BLACK, center=False):
         rect = surf.get_rect(topleft=pos)
     screen.blit(surf, rect)
 
+# Fonction qui permet de dessiner la sidebar
 def draw_sidebar():
     global quit_btn_pos, pause_btn_pos
     rect_x = 0
@@ -144,6 +156,7 @@ def draw_sidebar():
     time = chrono.format_temps(chrono.temps_ecoule())
     draw_text(time,(rect_w/4,txt_y))
 
+#Dessinage des lignes
 def draw_grid_lines(screen, long,larg):
     # vertical lines
     if long>larg:
@@ -158,16 +171,9 @@ def draw_grid_lines(screen, long,larg):
     for i in range(larg-1):
         draw_line(screen, (0, i+1), (max,i+1))
 
+# Placemment des pions sur le plateau (1 seul à la fois)
 def draw_player(coordinates, player):
-    # coordinates = (col, row)
-    col, row = coordinates
-    x, y = col, row
-
-    # sécurité indexation
-    if y < 0 or y >= len(core.grid) or x < 0 or x >= len(core.grid[y]):
-        return
-
-    val = core.grid[y][x]
+    
     # coordinates = (col, row)
     col, row = coordinates
     x, y = col, row
@@ -226,6 +232,7 @@ def draw_player(coordinates, player):
     
     screen.blit(img, pixel)
 
+# Placement des étoiles en fonction des coordonée.
 def draw_star(coordinates, player):
     x, y = coordinates
     if player == 0:
@@ -235,13 +242,15 @@ def draw_star(coordinates, player):
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 
+# Placement d'une étoile d'une autre couleur
+# si la souris passe sur une étoile
 def draw_hover_star(coordinates):
     x, y = coordinates
     # image jaune
     star = pygame.image.load(f"Assets/{folder}/stars/star.png")  
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
-
+# Place tout les pions en fonctions de leurs positions
 def load_player():
     # parcourt par ligne (y) puis colonne (x)
     # indexation cohérente grid[y][x]
@@ -257,7 +266,8 @@ def load_player():
             val = core.grid[y][x]
             if val is not None:
                 draw_player((x, y), val)
-
+# si l'écran est plus grand de 8x8 case, on répète le fond
+# d'écran
 def repeat_bg() :
         board_px_w = core.BOARD_WIDTH * core.TILE_SIZE
         board_px_h = core.BOARD_HEIGHT * core.TILE_SIZE
@@ -267,6 +277,7 @@ def repeat_bg() :
             for by in range(0, board_px_h, tile_h):
                 screen.blit(background_tile, (bx, by))
 
+# pour chaque coup possible, on place une étoile
 def place_star(pos):
     if not pause :
         legal_moves = core.check_legal_moves(core.current_player)
@@ -279,6 +290,8 @@ def place_star(pos):
             else:
                 draw_star(move, core.current_player)
 
+# Affichage de toutes les images qui doivent apparaître sur
+# Le plateau.
 def loadscreen():
     # Répéter le bloc 8x8 (background_tile) pour couvrir
     # dynamiquement la taille du plateau
@@ -298,6 +311,7 @@ def loadscreen():
                   (rect_x + rect_w // 2, rect_y + rect_h // 2),
                   font=TITLE_FONT, center=True)
 
+# Affichage des images à la fin du jeu
 def draw_gameover(winner,score_1, score_2) :
     # hauteur = 2 cases, largeur = largeur du plateau, centré verticalement
     rect_h = core.TILE_SIZE * 2
@@ -338,6 +352,8 @@ def draw_gameover(winner,score_1, score_2) :
                  rect_y + rect_h // 2 + core.TILE_SIZE // 1.5),
                  font=UNDER_TITLE_FONT, color=BLACK, center=True)
     pygame.display.flip()
+
+# Vérifie si la souris est sur un bouton
 def btn_ispressed(btn_pos):
     mouse_x, mouse_y = pygame.mouse.get_pos()
     btn_x,btn_y = btn_pos
@@ -347,6 +363,7 @@ def btn_ispressed(btn_pos):
         + btn_height):
         return True
 
+# Met le jeu en pause ou reprend le jeu
 def pause_game():
     global pause
     pause = not pause
@@ -355,11 +372,14 @@ def pause_game():
     else:
         chrono.start()
 
+# Boucle qui fais fonctionner le jeu.
 def run_othello(bot_status, level_bot=None,starting_player=None):
     global bot, level, bot_move_time
     if bot_status:
         bot = True
         level = level_bot
+    else:
+        bot = False
     start_othello(starting_player=starting_player)
     sound.play_game_music(True)
     running = True
@@ -394,8 +414,8 @@ def run_othello(bot_status, level_bot=None,starting_player=None):
             pygame.display.flip()
 
         # Aide demander à Copilot pour implémenter un délaiavant que 
-        # le bot joue. Peux-tu m'aider à faire en sorte que le bot 
-        # attende un certain délai avant de jouer son coup ?
+        # le bot joue. "Peux-tu m'aider à faire en sorte que le bot 
+        # attende un certain délai avant de jouer son coup ?"
         if core.current_player == 1 and bot and not pause and core.gamerun:
             now = pygame.time.get_ticks()
             if bot_move_time is None:

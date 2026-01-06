@@ -4,10 +4,14 @@ __pycache__/
 .idea/
 **/__idea__/
 .vscode/
+/dist/
+/build/
 
 # Ignore project-specific settings file
 settings.json
 /settings.json
+main.spec
+main.exe
 # Ignore settings file (root)
  /settings.json
 # Ignore folder with spaces in the name

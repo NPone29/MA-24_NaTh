@@ -3,6 +3,8 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 import webbrowser
 import json
+from utils import resource_path
+
 
 import sound
 
@@ -20,14 +22,42 @@ def open_setting(root): # fonction qui va remplacer afficher la page du menu
     setting.run_settings(root)
 
 #fonction qui va lancer le jeu avec les arguments de lancement
-def open_othello(root,player_vs_ai=False,level="easy",starting_player=None):
-    sound.play_start()
-    sound.stop_menu()
-    root.destroy()
-    print(starting_player)
-    import gfx
-    sound.init_sound()
-    gfx.run_othello(player_vs_ai,level,starting_player=starting_player)
+def open_othello(root, player_vs_ai=False, level="easy", starting_player=None):
+    import sound
+    try:
+        sound.stop_menu()
+    except Exception:
+        pass
+
+    # destroy Tk main window before running pygame
+    try:
+        root.destroy()
+    except Exception:
+        pass
+
+    try:
+        import gfx
+        reopen = gfx.run_othello(player_vs_ai, level, starting_player=starting_player)
+    except Exception as e:
+        # print stack trace so you can debug the .exe crash
+        import traceback, sys
+        print("Exception while running gfx.run_othello():", e, file=sys.stderr)
+        traceback.print_exc()
+        reopen = False
+
+    if reopen:
+        # re-init sound subsystem safely and relaunch the menu
+        try:
+            sound.init_sound()
+            sound.play_menu(loop=True)
+        except Exception:
+            pass
+        try:
+            afficher_menu()
+        except Exception as e:
+            import traceback, sys
+            print("Failed to reopen menu:", e, file=sys.stderr)
+            traceback.print_exc()
 
 #fonction qui va fermer le programme avec une pop-up de validation
 def leave():
@@ -48,6 +78,7 @@ def page(page_name):
 
     if page_name=="main":
         main_frame.pack(fill=BOTH, expand=True)
+        setting.settings_frame.pack_forget()
         print("main page")
     elif page_name=="chose_play":
         chose_play_frame.pack(fill=BOTH, expand=True)
@@ -66,11 +97,12 @@ def afficher_menu():
     root = Tk()
     root.title("Othello Menu")
     root.geometry("450x500")
+    root.iconbitmap(resource_path("Assets\icon.ico"))
     import core
     core.init_core()
     folder= json.load(open("settings.json")).get("folder","default")
     original_image = Image.open(
-        f"Assets/{folder}/backgrounds/menu_background.png")
+        resource_path(f"Assets/{folder}/backgrounds/menu_background.png"))
     bg_resized = original_image.resize((450, 500), Image.LANCZOS)
     bg = ImageTk.PhotoImage(bg_resized)
 

@@ -4,6 +4,8 @@ from tkinter import *
 from tkinter import messagebox
 import time
 import random
+from utils import resource_path
+
 
 
 # Chemin vers le fichier de configuration JSON
@@ -32,15 +34,15 @@ def create_grid(long,larg):
 # Initialisation du jeu en deffinissant les joueurs, le 
 # plateau et les images 
 def init_core(starting_player=None):
-    global grid, skipped, gamerun, current_player
+    global grid, skipped, gamerun, current_player,config
     global BACKGROUND_IMAGE_NAME,BOARD_WIDTH,BOARD_HEIGHT,TILE_SIZE,font,folder
     with open(json_file_path, 'r') as json_file:
         config = json.load(json_file)
     folder= config.get("folder","default")
     background = config.get("BACKGROUND_IMAGE_NAME", "default_background.png")
     if background == "None_background.png":
-        background = "default_background.png"
-    BACKGROUND_IMAGE_NAME = f"Assets/{folder}/backgrounds/{background}"
+        background ="default_background.png"
+    BACKGROUND_IMAGE_NAME = resource_path(f"Assets/{folder}/backgrounds/{background}")
     BOARD_WIDTH = config.get("BOARD_WIDTH")
     BOARD_HEIGHT = config.get("BOARD_HEIGHT")
     TILE_SIZE = config.get("TITLE_SIZE")
@@ -193,7 +195,7 @@ def gameover() :
     global gamerun
     if gamerun :
         sound.stop_game_music()
-        sound.play_winner()
+        #sound.play_winner()
     gamerun = False
     score_player1,score_player2 = calcul_score()
 

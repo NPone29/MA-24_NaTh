@@ -6,14 +6,12 @@ __pycache__/
 .vscode/
 /dist/
 /build/
+.venv/
 
 # Ignore project-specific settings file
 settings.json
 /settings.json
-main.spec
 main.exe
-# Ignore settings file (root)
- /settings.json
 # Ignore folder with spaces in the name
 #Utile pour prog/
 
@@ -22,3 +20,4 @@ main.exe
 *.pyc
 *.pyo
 *.pyd
+*.exe

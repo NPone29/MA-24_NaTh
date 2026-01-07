@@ -32,9 +32,11 @@ def run_settings(parent=None):
         })
         with open("settings.json", "w", encoding="utf-8") as f:
             json.dump(cfg, f, indent=4, ensure_ascii=False)
-        messagebox.showinfo("Glitch Mode", 
+        messagebox.showwarning("Glitch Mode", 
                             "Glitch mode has been enabled. " \
-                            "The game will now restart to apply the changes.")
+                            "The game will now restart to apply the changes." \
+                            " If it does not restart automatically, " \
+                            "please restart it manually.")
         import sound as sd
         sd.stop_menu()
         sd.init_sound()
@@ -151,7 +153,8 @@ def run_settings(parent=None):
                 pass
 
     check_art_mode()
-    # Scale passe la valeur en argument ; trace_add passe (name, index, mode)
+    # Scale passe la valeur en argument ;
+    # trace_add passe (name, index, mode)
     volume_scale.config(command=lambda v: 
                         (afficher_valeur_sound(v), check_art_mode()))
     music_var.trace_add("write", lambda *args: check_art_mode())
@@ -178,9 +181,16 @@ def run_settings(parent=None):
                             Do you want to save these settings?""")
         if status is True:
             # charge la config actuelle, modifie seulement les clefs voulues
+            from core import config
+            if  config.get("glitch_mode")==1:
+                restart = True
+            else:
+                restart = False
             try:
                 with open("settings.json", "r", encoding="utf-8") as f:
                     cfg = json.load(f)
+                
+
             except Exception:
                 cfg = {}
             cfg.update({
@@ -205,8 +215,22 @@ def run_settings(parent=None):
             sd.stop_menu()
             sd.init_sound()
             sd.play_menu(True)
-            parent.destroy()
-            subprocess.run(["python", "main.py"])
+            if config.get("art_mode") == 1 or art_mode.get()==1 or restart :
+                restart = True
+            else:
+                restart = False
+            if restart:
+                messagebox.showwarning("The game will restart",
+                                       "The game will restart. If it does not" \
+                                       " restart automatically," \
+                                       " please restart it manually.")
+                parent.destroy()
+                subprocess.run(["python", "main.py"])
+            else:
+                from start_menu import menu
+                menu.page("main")
+                
+
         elif status is False:
             menu.page("main")
             settings_frame.destroy()

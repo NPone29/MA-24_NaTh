@@ -3,6 +3,8 @@ import core
 import json
 import sound
 import time
+from utils import resource_path
+
 
 # Initialisation de pygame
 pygame.init()
@@ -43,16 +45,16 @@ def start_othello(starting_player=None):
     
     folder = json.load(open("settings.json")).get("folder","default")
     font = core.font
-    gameIcon = pygame.image.load(f"Assets/{folder}/icon.png")
+    gameIcon = pygame.image.load(resource_path(f"Assets/{folder}/icon.png"))
     pygame.display.set_icon(gameIcon)
-    BLUE_PAWN     = _load_scaled(f"Assets/{folder}/pawns/blue_pawn.png")
-    BLUE_FR1      = _load_scaled(f"Assets/{folder}/pawns/blue_pawn_fr1.png")
-    BLUE_FR2      = _load_scaled(f"Assets/{folder}/pawns/blue_pawn_fr2.png")
-    BLUE_FR3      = _load_scaled(f"Assets/{folder}/pawns/blue_pawn_fr3.png")
-    RED_PAWN      = _load_scaled(f"Assets/{folder}/pawns/red_pawn.png")
-    RED_FR1       = _load_scaled(f"Assets/{folder}/pawns/red_pawn_fr1.png")
-    RED_FR2       = _load_scaled(f"Assets/{folder}/pawns/red_pawn_fr2.png")
-    RED_FR3       = _load_scaled(f"Assets/{folder}/pawns/red_pawn_fr3.png")
+    BLUE_PAWN     = _load_scaled(resource_path(f"Assets/{folder}/pawns/blue_pawn.png"))
+    BLUE_FR1      = _load_scaled(resource_path(f"Assets/{folder}/pawns/blue_pawn_fr1.png"))
+    BLUE_FR2      = _load_scaled(resource_path(f"Assets/{folder}/pawns/blue_pawn_fr2.png"))
+    BLUE_FR3      = _load_scaled(resource_path(f"Assets/{folder}/pawns/blue_pawn_fr3.png"))
+    RED_PAWN      = _load_scaled(resource_path(f"Assets/{folder}/pawns/red_pawn.png"))
+    RED_FR1       = _load_scaled(resource_path(f"Assets/{folder}/pawns/red_pawn_fr1.png"))
+    RED_FR2       = _load_scaled(resource_path(f"Assets/{folder}/pawns/red_pawn_fr2.png"))
+    RED_FR3       = _load_scaled(resource_path(f"Assets/{folder}/pawns/red_pawn_fr3.png"))
 
     FONT_DEFAULT = pygame.font.SysFont(f"{font}", 28)
     TITLE_FONT = pygame.font.SysFont(f"{font}", 38)
@@ -72,13 +74,13 @@ BOT_MOVE_DELAY_MS = 600
 
 # Importation des images des boutons
 pause_btn_image = pygame.image.load(
-    f"Assets/{folder}/buttons/pause_buttons.png").convert_alpha()
+    resource_path(f"Assets/{folder}/buttons/pause_buttons.png")).convert_alpha()
 pause_btn_image = pygame.transform.scale(pause_btn_image,(100,40))
 quit_btn_image = pygame.image.load(
-    f"Assets/{folder}/buttons/quit_buttons.png").convert_alpha()
+    resource_path(f"Assets/{folder}/buttons/quit_buttons.png")).convert_alpha()
 quit_btn_image = pygame.transform.scale(quit_btn_image,(100,40))
 unpause_btn_image = pygame.image.load(
-    f"Assets/{folder}/buttons/unpause_buttons.png").convert_alpha()
+    resource_path(f"Assets/{folder}/buttons/unpause_buttons.png")).convert_alpha()
 unpause_btn_image = pygame.transform.scale(unpause_btn_image,(100,40))
 
 
@@ -236,9 +238,9 @@ def draw_player(coordinates, player):
 def draw_star(coordinates, player):
     x, y = coordinates
     if player == 0:
-        star = pygame.image.load(f"Assets/{folder}/stars/blue_star.png")
+        star = pygame.image.load(resource_path(f"Assets/{folder}/stars/blue_star.png"))
     else:
-        star = pygame.image.load(f"Assets/{folder}/stars/red_star.png")
+        star = pygame.image.load(resource_path(f"Assets/{folder}/stars/red_star.png"))
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 
@@ -247,7 +249,7 @@ def draw_star(coordinates, player):
 def draw_hover_star(coordinates):
     x, y = coordinates
     # image jaune
-    star = pygame.image.load(f"Assets/{folder}/stars/star.png")  
+    star = pygame.image.load(resource_path(f"Assets/{folder}/stars/star.png"))
     star = pygame.transform.scale(star, (core.TILE_SIZE, core.TILE_SIZE))
     screen.blit(star, (x * core.TILE_SIZE, y * core.TILE_SIZE))
 # Place tout les pions en fonctions de leurs positions
@@ -429,7 +431,7 @@ def run_othello(bot_status, level_bot=None,starting_player=None):
 
         clock.tick(60)
     pygame.display.quit()
-    sound.stop_winner_music()
+    #sound.stop_winner_music()
     sound.stop_game_music()
     from start_menu import menu
     menu.afficher_menu()

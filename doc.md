@@ -14,10 +14,8 @@ Rédiger par [Natan Humblet](https://github.com/NPone29) et transformer en .md p
     - [Conseil stratégiques essentiels](#conseils-stratégiques-essentiels-)
 2. [Création du jeu](#création-du-jeu)
 3. [Installer et jouer](#installer-et-jouer-à-notre-jeu-othello-)
-    - [Prérequis](#prérequis-)
-    - [Installation du jeu](#installation-du-jeu-)
-    - [Installation des dépendances](#installation-des-dépendances-)
-    - [Lancement du jeu](#lancement-du-jeu-)
+    - [Installation simple](#Installation-simple-)
+    - [Installation complète](#installation-complète)
     
 
 ## Comment ça Marche
@@ -112,9 +110,11 @@ curl -L -o RELEASE.Othello.1.1.2.exe https://github.com/NPone29/MA-24_NaTh/relea
 1. Cliquer sur le lien de notre **release** : https://github.com/NPone29/MA-24_NaTh/releases
 2. Téléchargez le fichier .exe.
 
+### Lancement du jeu :
+Une fois le .exe installer tout devrait fonctionner correctement.
+Pour le démarrer, vous avez juste à exécuter le .exe
+
 ## Installation complète
-
-
 
 ### Prérequis :
 
@@ -175,3 +175,6 @@ Nous espérons que vous prendrez autant de plaisir à jouer que nous en avons eu
 
 **Bonne partie !**
 
+
+
+[def]: #-Installation-simple-:-

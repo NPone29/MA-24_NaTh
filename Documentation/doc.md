@@ -1,6 +1,6 @@
 ## Doc Othello
 
-Rédiger par [Natan Humblet](https://github.com/NPone29) et transformer en .md par [Théo Läderach](https://github.com/pj43svh)
+Rédiger par [NPone29](https://github.com/NPone29) et transformer en .md par [EscorpionTheo](https://github.com/pj43svh)
 
 ![image couverture](/Assets/default/backgrounds/menu_background.png)
 

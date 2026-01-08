@@ -62,7 +62,11 @@ python main.py
 For support, email [natan.humblet@eduvaud.ch](mailto:natan.humblet@eduvaud.ch).
 
 ## Documentation
-[click here](doc.md) to view the documentation.
+
+Please note that our documentation was written in French. Please use a translator to understand the documentation if you do not speak French.
+
+- [click here](/Documentation/doc.md) to view the documentation in MD format
+- [click here](/Documentation/Documentation%20Othello%20NPone29%20et%20EscorpionThéo.pdf) to view the documentation in PDF format
 
 
 ## CPNV school

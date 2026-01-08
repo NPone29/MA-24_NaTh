@@ -1,6 +1,6 @@
 ## Doc Othello
 
-Par [Natan Humblet](https://github.com/NPone29) et [Théo Läderach](https://github.com/pj43svh)
+Rédiger par [NPone29](https://github.com/NPone29) et transformer en .md par [EscorpionTheo](https://github.com/pj43svh)
 
 ![image couverture](/Assets/default/backgrounds/menu_background.png)
 
@@ -14,10 +14,8 @@ Par [Natan Humblet](https://github.com/NPone29) et [Théo Läderach](https://git
     - [Conseil stratégiques essentiels](#conseils-stratégiques-essentiels-)
 2. [Création du jeu](#création-du-jeu)
 3. [Installer et jouer](#installer-et-jouer-à-notre-jeu-othello-)
-    - [Prérequis](#prérequis-)
-    - [Installation du jeu](#installation-du-jeu-)
-    - [Installation des dépendances](#installation-des-dépendances-)
-    - [Lancement du jeu](#lancement-du-jeu-)
+    - [Installation simple](#Installation-simple-)
+    - [Installation complète](#installation-complète)
     
 
 ## Comment ça Marche
@@ -85,7 +83,38 @@ Voici des questions qui nous sont souvent posée :
 *glitched mode :*
 ![Glitched mode](/Assets/screenshots/glitched_mode.png)
 
-## Installer et jouer à notre jeu Othello :
+# Installer et jouer à notre jeu Othello :
+
+Notre jeu propose deux méthodes d’installation, selon ce que vous souhaitez faire :
+- Installation simple (pour jouer uniquement):
+Cette méthode est la plus rapide : il vous suffit d’installer le fichier .exe et vous pouvez commencer à jouer immédiatement.
+- Installation complète (pour modifier le jeu) :
+Cette version est destinée aux personnes qui veulent accéder au code source et personnaliser le jeu. L’installation est un peu plus technique, mais elle vous donne accès à l’ensemble des fichiers du projet.
+
+## Installation simple : 
+
+Vous pouvez installer notre fichier .exe de deux manières : 
+
+- Installation via le terminal (CMD)
+- Installation en téléchargeant directement le fichier .exe
+
+### Installation via le CMD
+1. Ouvrez le CMD
+2. Exécutez la commande suivante pour télécharger l'exécutable :
+```
+curl -L -o RELEASE.Othello.1.1.2.exe https://github.com/NPone29/MA-24_NaTh/releases/download/V1.1/RELEASE.Othello.1.1.2.exe
+
+```
+
+### Installation en téléchargeant le fichier
+1. Cliquer sur le lien de notre **release** : https://github.com/NPone29/MA-24_NaTh/releases
+2. Téléchargez le fichier .exe.
+
+### Lancement du jeu :
+Une fois le .exe installer tout devrait fonctionner correctement.
+Pour le démarrer, vous avez juste à exécuter le .exe
+
+## Installation complète
 
 ### Prérequis :
 
@@ -146,3 +175,6 @@ Nous espérons que vous prendrez autant de plaisir à jouer que nous en avons eu
 
 **Bonne partie !**
 
+
+
+[def]: #-Installation-simple-:-

@@ -213,8 +213,6 @@ def run_settings(parent=None):
                 json.dump(cfg, json_file, indent=4, ensure_ascii=False)
             import sound as sd
             sd.stop_menu()
-            sd.init_sound()
-            sd.play_menu(True)
             if config.get("art_mode") == 1 or art_mode.get()==1 or restart :
                 restart = True
             else:
@@ -229,6 +227,8 @@ def run_settings(parent=None):
             else:
                 from start_menu import menu
                 menu.page("main")
+                sd.init_sound()
+                sd.play_menu(True)
                 
 
         elif status is False:

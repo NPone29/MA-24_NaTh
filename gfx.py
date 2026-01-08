@@ -431,7 +431,7 @@ def run_othello(bot_status, level_bot=None,starting_player=None):
 
         clock.tick(60)
     pygame.display.quit()
-    #sound.stop_winner_music()
+    sound.stop_winner_music()
     sound.stop_game_music()
     from start_menu import menu
     menu.afficher_menu()

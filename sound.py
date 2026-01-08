@@ -2,6 +2,33 @@ import json
 import os
 from utils import resource_path
 
+
+# API publique — fonctions sûres même si mixer indisponible
+def init_sound():
+    # possibilité de relire settings.json et (ré)initialiser le mixer si dispo
+    global _sound_on, _volume, _folder, _mixer_available
+    try:
+        with open(resource_path("settings.json"), "r", encoding="utf-8") as f:
+            cfg = json.load(f)
+            _sound_on = cfg.get("sound", 1)
+            _volume = cfg.get("volume", 0.5)
+            _folder = cfg.get("folder", "default")
+    except Exception:
+        pass
+    # tenter de réinitialiser le mixer si nécessaire
+    if not _mixer_available:
+        try:
+            import pygame
+            if getattr(pygame, "mixer", None) is not None:
+                try:
+                    pygame.mixer.init()
+                    # recharger le module et sounds n'est pas fait ici (lazy load on play)
+                    _mixer_available = True
+                except Exception:
+                    _mixer_available = False
+        except Exception:
+            _mixer_available = False
+    
 # charger config (assure que settings.json existe avant import)
 _config = {}
 try:
@@ -62,33 +89,12 @@ if _mixer_available:
         _GAME_MUSIC.set_volume(_volume)
     except Exception:
         _GAME_MUSIC = None
-
-# API publique — fonctions sûres même si mixer indisponible
-def init_sound():
-    # possibilité de relire settings.json et (ré)initialiser le mixer si dispo
-    global _sound_on, _volume, _folder, _mixer_available
     try:
-        with open(resource_path("settings.json"), "r", encoding="utf-8") as f:
-            cfg = json.load(f)
-            _sound_on = cfg.get("sound", 1)
-            _volume = cfg.get("volume", 0.5)
-            _folder = cfg.get("folder", "default")
+        _WINNER_MUSIC = _mixer.Sound(resource_path(f"Assets/{_folder}/sounds/winner.mp3"))
+        _WINNER_MUSIC.set_volume(_volume)
     except Exception:
-        pass
-    # tenter de réinitialiser le mixer si nécessaire
-    if not _mixer_available:
-        try:
-            import pygame
-            if getattr(pygame, "mixer", None) is not None:
-                try:
-                    pygame.mixer.init()
-                    # recharger le module et sounds n'est pas fait ici (lazy load on play)
-                    _mixer_available = True
-                except Exception:
-                    _mixer_available = False
-        except Exception:
-            _mixer_available = False
-
+        _WINNER_MUSIC = None
+    
 def play_pop():
     if not _sound_on or not _mixer_available:
         return
@@ -140,5 +146,22 @@ def stop_game_music():
     try:
         if _GAME_MUSIC:
             _GAME_MUSIC.stop()
+    except Exception:
+        pass
+def play_winner_music(loop=True):
+    if not _sound_on or not _mixer_available:
+        return
+    try:
+        if _WINNER_MUSIC:
+            _WINNER_MUSIC.play(loops=-1 if loop else 0)
+    except Exception:
+        pass
+
+def stop_winner_music():
+    if not _mixer_available:
+        return
+    try:
+        if _WINNER_MUSIC:
+            _WINNER_MUSIC.stop()
     except Exception:
         pass

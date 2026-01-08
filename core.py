@@ -195,7 +195,7 @@ def gameover() :
     global gamerun
     if gamerun :
         sound.stop_game_music()
-        #sound.play_winner()
+        sound.play_winner_music()
     gamerun = False
     score_player1,score_player2 = calcul_score()
 

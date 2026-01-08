@@ -4,13 +4,12 @@ from PIL import Image, ImageTk
 import webbrowser
 import json
 from utils import resource_path
-
-
 import sound
+import sys
 
 ###############################################################################
 
-sound.init_sound()
+
 
 def afficher_credit(): # Fonction qui affiche les crédits
     if messagebox.askyesno("Credits","""Developed by NPone29 and EscorpionTheo.
@@ -63,9 +62,24 @@ def open_othello(root, player_vs_ai=False, level="easy", starting_player=None):
 def leave():
     if messagebox.askyesno("do you want to leave?",
                            "Do you really want to quit the game?"):
-        exit()
-        import sys
-        sys.exit()
+        try:
+            sound.stop_menu()
+        except Exception:
+            pass
+        try:
+            root.destroy()
+        except Exception:
+            pass
+        try:
+            sys.exit(0)
+        except Exception:
+            try:
+                import os
+                os._exit(0)
+            except Exception:
+                pass
+
+
 
 #fonction qui affiche une page correspondant à l'argument
 def page(page_name):
@@ -93,6 +107,7 @@ def page(page_name):
 # fonction qui va afficher tout le menu
 def afficher_menu():
     global main_frame,chose_play_frame,chose_level_frame,root
+    sound.init_sound()
     sound.play_menu(loop=True)
     root = Tk()
     root.title("Othello Menu")

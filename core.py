@@ -1,3 +1,8 @@
+# Title : Script qui gère tout les pocessus invisible du jeu
+# author : pj43svh & NPone29
+# Date : 08.01.2026
+# Version : 1.2.1
+
 import json
 import sound
 from tkinter import *

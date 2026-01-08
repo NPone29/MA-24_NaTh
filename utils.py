@@ -1,3 +1,9 @@
+# Title : Script qui gère les chemins de ressources pour l'executable en .exe
+# author : pj43svh & NPone29
+# Date : 08.01.2026
+# Version : 1.2.1
+
+
 import os
 import sys
 

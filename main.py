@@ -1,3 +1,8 @@
+# Title : Script qui lance le jeu et crée le fichier de configuration s'il n'existe pas
+# author : pj43svh & NPone29
+# Date : 08.01.2026
+# Version : 1.2.1
+
 import os
 import json
 

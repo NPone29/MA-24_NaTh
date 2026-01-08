@@ -1,3 +1,8 @@
+# Title : Script qui gère l'interface du menu principal
+# author : pj43svh & NPone29
+# Date : 08.01.2026
+# Version : 1.2.1
+
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk

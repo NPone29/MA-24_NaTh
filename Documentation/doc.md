@@ -1,6 +1,6 @@
 ## Doc Othello
 
-Rédiger par [NPone29](https://github.com/NPone29) et transformer en .md par [EscorpionTheo](https://github.com/pj43svh)
+Rédigé par [NPone29](https://github.com/NPone29) et transformé en .md par [EscorpionTheo](https://github.com/pj43svh)
 
 ![image couverture](/Assets/default/backgrounds/menu_background.png)
 
@@ -24,7 +24,7 @@ Rédiger par [NPone29](https://github.com/NPone29) et transformer en .md par [Es
 
 **Objectif du jeu :** avoir la majorité des pions de sa couleur à la fin de la partie
 **Plateau :** 8x8 cases
-Pions : bicolores, habituellement en noir et blanc (notre version est en rouge et bleu)
+Pions : bicolores, habituellement noirs et blancs (notre version est en rouge et bleu)
 
 ### Matériel et mise en place : 
 
@@ -33,14 +33,14 @@ Plateau 8x8 et 64 pions (32 noir/rouge et 32 blanc/bleu)
 ![image debut](/Assets/screenshots/debut_partie.png)
 
 ### Déroulement du jeu : 
-- Le joueur avec les pions noir commence la partie.
+- Le joueur avec les pions noirs commence la partie.
 
 - À chaque tour, un joueur place un pion de sa couleur sur une case vide de façon à encadrer une ou plusieurs rangées continues de pions adverses entre le pion posé et un autre pion de sa couleur déjà présent sur le plateau.
 
 - Les directions valides sont les 8 directions (horizontales, verticales, diagonales). Un coup est valide seulement s’il encadre au moins un pion adverse ; sinon il est illégal.
 
 ### Règle du retournement : 
-Quand un joueur place un pion, tous les pions adverses pris en sandwich entre ce pion et un autre pion de sa couleur sont retournés, quelle que soit la direction (ligne, colonne ou diagonale). Voici un *exemple* pour qui vous visualisez bien comment cela marche :
+Quand un joueur place un pion, tous les pions adverses pris en sandwich entre ce pion et un autre pion de sa couleur sont retournés, quelle que soit la direction (ligne, colonne ou diagonale). Voici un *exemple* pour que vous visualisiez bien comment cela marche :
 
 ![retournement](/Assets/screenshots/gameplay_retournement.gif)
 
@@ -58,7 +58,7 @@ Si un joueur **n’a aucun coup valide**, il **passe** son tour ; si les deux jo
 ## Création du jeu
 
 Le jeu a tout d’abord été créé pour un projet qui fera sujet d’une note au CPNV.
-Voici des questions qui nous sont souvent posée :
+Voici des questions qui nous sont souvent posées :
 
 -	Pourquoi avoir choisi les couleurs bleu et rouge pour vos pions ?
 
@@ -77,7 +77,7 @@ Voici des questions qui nous sont souvent posée :
 
 -	Avez-vous mis des easter eggs dans votre jeu ?
 
-    **Natan :** Oui ! Il y a deux mode visuel caché dans le menu des paramètres. Je ne dirai pas lesquels. Bonne chance à ceux qui voudront les trouver !
+    **Natan :** Oui ! Il y a deux modes visuels cachés dans le menu des paramètres. Je ne dirai pas lesquels. Bonne chance à ceux qui voudront les trouver !
 *Dev Art mode :*
 ![dev-art mode](/Assets/screenshots/devart_mode.png)
 *glitched mode :*
@@ -107,12 +107,12 @@ curl -L -o RELEASE.Othello.1.1.2.exe https://github.com/NPone29/MA-24_NaTh/relea
 ```
 
 ### Installation en téléchargeant le fichier
-1. Cliquer sur le lien de notre **release** : https://github.com/NPone29/MA-24_NaTh/releases
+1. Cliquez sur le lien de notre **release** : https://github.com/NPone29/MA-24_NaTh/releases
 2. Téléchargez le fichier .exe.
 
 ### Lancement du jeu :
-Une fois le .exe installer tout devrait fonctionner correctement.
-Pour le démarrer, vous avez juste à exécuter le .exe
+Une fois le .exe installé, tout devrait fonctionner correctement.
+Pour le démarrer, vous avez simplement à exécuter le .exe
 
 ## Installation complète
 
@@ -139,7 +139,7 @@ Une fois le dépôt cloné, vous êtes presque prêt à jouer à notre version d
 Pour installer Pygame, exécutez cette commande dans le terminal : pip install pygame
 
 
-Si vous avez du mal avec l’installation de pygame ou alors que le terminal vous affiche une erreur, voici la solution pour pouvoir quand même l’installer :
+Si vous avez du mal avec l’installation de pygame ou si le terminal vous affiche une erreur, voici la solution pour pouvoir quand même l’installer :
 - Télécharger [Pycharm](https://www.jetbrains.com/pycharm/download/?section=windows ) Community (gratuit)
 - Ou installer une version antérieure de python (ex : 3.11)
 
@@ -162,7 +162,7 @@ pip install pillow
 
 Une fois tous les packages installés, le jeu devrait fonctionner correctement.
 
-Pour démarrer le jeu, vous avez juste à aller dans le dossier du dépot et exécuter le main.py :
+Pour démarrer le jeu, vous avez simplement à aller dans le dossier du dépot et exécuter le main.py :
 ``` bash
 cd MA-24_NaTh/
 python main.py

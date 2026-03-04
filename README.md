@@ -26,7 +26,7 @@ Voici une traduction claire, naturelle et professionnelle en anglais :
 - Open the CMD.
 - Run the following command to download the executable:
 ```
-curl -L -o RELEASE.Othello.1.1.2.exe https://github.com/NPone29/MA-24_NaTh/releases/download/V1.1/RELEASE.Othello.1.1.2.exe
+curl -L -o RELEASE.Othello.1.2.0.exe https://github.com/NPone29/MA-24_NaTh/releases/download/V1.2/RELEASE.Othello.1.2.0.exe
 ```
 #### Installation by downloading the file
 - Click on our release link: https://github.com/NPone29/MA-24_NaTh/releases

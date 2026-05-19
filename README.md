@@ -20,8 +20,6 @@ You can install our .exe file in two different ways:
 - Installation via the terminal (CMD)
 - Installation by directly downloading the .exe file
 
-Voici une traduction claire, naturelle et professionnelle en anglais :
-
 #### Installation via CMD
 - Open the CMD.
 - Run the following command to download the executable:
@@ -95,7 +93,7 @@ python main.py
 
 ## Support
 
-For support, email [natan.humblet@eduvaud.ch](mailto:natan.humblet@eduvaud.ch).
+For support, please send a Discord message to npone29#0000
 
 ## Documentation
 

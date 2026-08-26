@@ -168,8 +168,7 @@ cd MA-24_NaTh/
 python main.py
 ```
 
-Si vous rencontrez des problèmes, n’hésitez pas à nous contacter par email :
-*natan.humblet@eduvaud.com*
+Si vous rencontrez des problèmes, n’hésitez pas à nous écrire un MP discord à npone29#0000.
 
 Nous espérons que vous prendrez autant de plaisir à jouer que nous en avons eu à le développer.
 
